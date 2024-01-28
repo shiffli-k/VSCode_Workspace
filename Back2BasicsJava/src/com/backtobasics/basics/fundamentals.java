@@ -101,5 +101,10 @@ public class fundamentals {
         System.out.println(as == bs);
         System.out.println(as.equals(bs));
 
+        System.out.println("----------------");
+
+        System.out.println(a == as.intern());
+        System.out.println(a == as);
+
     }
 }
