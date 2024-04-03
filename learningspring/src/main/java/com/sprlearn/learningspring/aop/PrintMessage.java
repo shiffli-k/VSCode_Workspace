@@ -20,6 +20,4 @@ public class PrintMessage {
         return ResponseEntity.status(HttpStatus.OK).body("Yes, " + message);
     }
 
-    public ModelAndView
-
 }

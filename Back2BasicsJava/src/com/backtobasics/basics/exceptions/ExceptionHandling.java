@@ -2,10 +2,12 @@ package com.backtobasics.basics.exceptions;
 
 public class ExceptionHandling {
     public static void main(String[] args) {
+        Boolean state = false;
         try {
+
             int arr[] = { 1, 2, 3 };
-            // arr[0] = arr[4];
-            if (true) {
+            arr[0] = arr[4];
+            if (state) {
                 throw new CantDoThatClass("This Bad");
             }
         } catch (NullPointerException ne) {
@@ -13,7 +15,11 @@ public class ExceptionHandling {
             ne.printStackTrace();
         } catch (ArrayIndexOutOfBoundsException ae) {
             System.err.println("There goes index");
-            ae.printStackTrace();
+            // ae.printStackTrace();
+            for (StackTraceElement eachElement : ae.getStackTrace()) {
+                System.out.println(eachElement);
+            }
+            // System.out.println("Error at Line: "+);
         } catch (Exception e) {
             e.printStackTrace();
         } catch (Throwable t) {
