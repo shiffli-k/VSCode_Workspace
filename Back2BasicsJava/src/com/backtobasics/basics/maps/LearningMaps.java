@@ -7,7 +7,7 @@ import java.util.Map;
 public class LearningMaps {
     public static void main(String[] args) {
         // aHashMap();
-        linkedAccessMaps();
+        // linkedAccessMaps();
     }
     
     private static void linkedAccessMaps() {
