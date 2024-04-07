@@ -7,7 +7,7 @@ import java.util.Map;
 public class LearningMaps {
     public static void main(String[] args) {
         // aHashMap();
-        // linkedAccessMaps();
+        linkedAccessMaps();
     }
     
     private static void linkedAccessMaps() {
@@ -46,7 +46,7 @@ public class LearningMaps {
         nonAccessMap.put(8, "Val8");
         nonAccessMap.put(9, "Val9");
         
-        System.out.println("Access Disabled - Pre Access: "+accessMap);
+        System.out.println("Access Disabled - Pre Access: "+nonAccessMap);
         nonAccessMap.get(4);
         nonAccessMap.get(4);
         nonAccessMap.get(4);

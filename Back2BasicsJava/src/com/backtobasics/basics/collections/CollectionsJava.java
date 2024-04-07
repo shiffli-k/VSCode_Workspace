@@ -23,8 +23,8 @@ public class CollectionsJava {
             System.out.println("CarBrand contains German Cars");
 
         // germanCarBrand = new ArrayList<>(germanCarBrand.reversed());
-        germanCarBrand.reversed().forEach(item -> {
-            System.out.println(item);
-        });
+        // germanCarBrand.reversed().forEach(item -> {
+        //     System.out.println(item);
+        // });
     }
 }
