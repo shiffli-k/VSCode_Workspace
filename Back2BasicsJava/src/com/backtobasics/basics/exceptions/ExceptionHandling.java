@@ -2,6 +2,7 @@ package com.backtobasics.basics.exceptions;
 
 public class ExceptionHandling {
     public static void main(String[] args) {
+
         Boolean state = false;
         try {
 
@@ -39,4 +40,11 @@ class CantDoThatClass extends Throwable {
         super(errorText);
     }
 
+}
+
+
+class SurpriceException extends RuntimeException{
+    public SurpriceException() {
+        super("Didnt See that coming, did ya?");
+    }
 }
