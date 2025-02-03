@@ -1,4 +1,4 @@
-package com.dsa.array;
+package com.dsa.linkedlist.singly;
 
 class Node {
     int value;

@@ -10,6 +10,10 @@ import com.software.design.patterns.observer.MessageFeedSubscriber;
 import com.software.design.patterns.observer.interf.Observer;
 import com.software.design.patterns.singleton.LoggerService;
 import com.software.design.patterns.singleton.LoggerServiceThreadSafe;
+import com.software.design.patterns.stratergy.context.Bird;
+import com.software.design.patterns.stratergy.context.Ostrich;
+import com.software.design.patterns.stratergy.context.Pigeon;
+import com.software.design.patterns.stratergy.strats.BirdFlightStratergyForced;
 
 public class TryingOutDesignPatterns {
     public static void main(String[] args) throws InterruptedException {
@@ -18,7 +22,24 @@ public class TryingOutDesignPatterns {
         // factory_Pattern();
         // factory_Pattern_Better();
         // builder_Pattern();
-        observerPattern();
+        // observerPattern();
+        Stratergy_Pattern();
+
+    }
+
+    private static void Stratergy_Pattern() {
+        Bird myPigeonBob = new Pigeon("BOB");
+        Bird myOstrichJames = new Ostrich("James");
+
+        myOstrichJames.whoAmI();
+        myOstrichJames.doFly();
+        System.out.println("----------------------");
+        myPigeonBob.whoAmI();
+        myPigeonBob.doFly();
+        System.out.println("----------------------");
+        myOstrichJames.setFlightStrat(new BirdFlightStratergyForced());        
+        myOstrichJames.whoAmI();
+        myOstrichJames.doFly();
 
     }
 
@@ -40,7 +61,7 @@ public class TryingOutDesignPatterns {
         javaMessageFeed.subscribe(user1);
         javaMessageFeed.subscribe(user2);
         javaMessageFeed.subscribe(user3);
-        
+
         pythonMessageFeed.subscribe(user1);
         pythonMessageFeed.subscribe(user2);
         pythonMessageFeed.subscribe(user4);
@@ -51,7 +72,7 @@ public class TryingOutDesignPatterns {
 
         System.out.println("-- Pushing updates to Python Subscribers--");
         pythonMessageFeed.pushMessageToSubscribers("Python is kinda like C but you are not Cing the big picture!");
-        
+
         pythonMessageFeed.unSubscribe(user1);
 
         System.out.println("-- Pushing updates to Python Subscribers--");
