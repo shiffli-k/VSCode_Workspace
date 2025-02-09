@@ -54,7 +54,72 @@ public class MyLinkedListDoubly {
             currentNode = traverseTillIndex(currentNode, indexToInsert);
             currentNode.nxtNode = new NodeDLL(valueToInsert, currentNode, currentNode.nxtNode);
             currentNode.nxtNode.prvNode = currentNode;
+            ++sizeOfList;
         }
+    }
+
+    public void add(int valueToInsert) {
+        insertLast(valueToInsert);
+    }
+
+    public void insertLast(int valueToInsert) {
+        if (HEAD_NODE == null) {
+            HEAD_NODE = new NodeDLL(valueToInsert, null, null);
+        } else {
+            NodeDLL currentNode = HEAD_NODE;
+            currentNode = traverseTillEnd(currentNode);
+            currentNode.nxtNode = new NodeDLL(valueToInsert, currentNode, null);
+        }
+        ++sizeOfList;
+    }
+
+    // Node Deletion here
+    public void deleteFirst() {
+        if(HEAD_NODE == null){
+            throw new IndexOutOfBoundsException("The List in empty, you're trying to delete nothing -__-");
+        }
+        
+        HEAD_NODE = HEAD_NODE.nxtNode;
+        HEAD_NODE.prvNode = null;
+        --sizeOfList;
+        return;
+    }
+    
+    public void deleteLast(){
+        if(HEAD_NODE == null){
+            throw new IndexOutOfBoundsException("The List in empty, you're trying to delete nothing -__-");
+        }
+        
+        NodeDLL nodeTracker = HEAD_NODE;
+        nodeTracker = traverseTillEnd(nodeTracker);
+        nodeTracker.prvNode.nxtNode = null;
+        --sizeOfList;
+        return;
+    }
+    
+    public void deleteIndex(int indexToDeleteFrom){
+        if(HEAD_NODE == null){
+            throw new IndexOutOfBoundsException("The List in empty, you're trying to delete nothing -__-");
+        }
+        if(indexToDeleteFrom > sizeOfList-1){
+            throw new IndexOutOfBoundsException("The list ain't that big mate!");
+        }
+        
+
+        if(indexToDeleteFrom == 0)
+            deleteFirst();
+        else if (indexToDeleteFrom == sizeOfList-1)
+            deleteLast();
+        else{
+            NodeDLL nodeToDelete = HEAD_NODE;
+            nodeToDelete = traverseTillIndex(nodeToDelete, indexToDeleteFrom);
+            nodeToDelete = nodeToDelete.nxtNode;
+            nodeToDelete.prvNode.nxtNode = nodeToDelete.nxtNode;
+            nodeToDelete.nxtNode.prvNode = nodeToDelete.prvNode;
+            --sizeOfList;
+        }
+
+        return;
     }
 
     private NodeDLL traverseTillIndex(NodeDLL passedNode, int indexToReturn) {
@@ -66,8 +131,11 @@ public class MyLinkedListDoubly {
         return passedNode;
     }
 
-    private void traverseTillEnd(NodeDLL startingNode) {
-
+    private NodeDLL traverseTillEnd(NodeDLL startingNode) {
+        while (startingNode.nxtNode != null) {
+            startingNode = startingNode.nxtNode;
+        }
+        return startingNode;
     }
 
     public void printAllNodes() {

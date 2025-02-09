@@ -1,6 +1,8 @@
 package com.dsa.linkedlist;
 
+import java.util.Deque;
 import java.util.Random;
+import java.util.Stack;
 
 import com.dsa.linkedlist.singly.MyLinkedList;
 import com.dsa.linkedlist.singly.MyLinkedListDoubly;
@@ -23,13 +25,24 @@ public class UsingMyLinkedList {
 
     private static void usingDoublyLinkedList() {
         MyLinkedListDoubly lst1 = new MyLinkedListDoubly();
-        lst1.insertFirst(4);
-        lst1.insertFirst(3);
-        lst1.insertFirst(2);
-        lst1.insertFirst(1);
+        loadMyLinkedList(10, lst1);
         lst1.printAllNodes();
-        lst1.insertAtIndex(99, 0);
+        lst1.insertFirst(0);
+        lst1.insertLast(6969);
         lst1.printAllNodes();
+        lst1.insertAtIndex(420, 0);
+        lst1.printAllNodes();
+        lst1.printSizeOfList();
+        System.out.println("\n\n");
+        System.out.println("--------DELETION--------");
+        // lst1.deleteFirst();
+        // lst1.deleteLast();
+        lst1.printAllNodes(); 
+        lst1.deleteIndex(12);
+        lst1.printAllNodes(); 
+        lst1.printSizeOfList();
+
+        
     }
 
     private static void usingMySingleLinkedList() {
@@ -49,6 +62,12 @@ public class UsingMyLinkedList {
     private static void loadMyLinkedList(int limit, MyLinkedList passedLinkedList) {
         for (int i = 0; i < limit; i++) {
             passedLinkedList.addElement(new Random().nextInt(1, 1000));
+        }
+        return;
+    }
+    private static void loadMyLinkedList(int limit, MyLinkedListDoubly passedLinkedList) {
+        for (int i = 0; i < limit; i++) {
+            passedLinkedList.add(new Random().nextInt(1,99));
         }
         return;
     }
