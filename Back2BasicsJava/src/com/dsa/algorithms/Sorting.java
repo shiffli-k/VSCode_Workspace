@@ -2,16 +2,39 @@ package com.dsa.algorithms;
 
 import java.util.Random;
 
-import com.software.design.patterns.observer.MessageFeed.contentType;
-
 public class Sorting {
 
     private static int[] myAr = loadArrayWithElem(10);
 
     public static void main(String[] args) {
         printArray(myAr);
-        sortArrayBubbleSort(myAr);
+        // sortArrayBubbleSort(myAr);
+        sortArraySelectionSort(myAr);
         printArray(myAr);
+    }
+
+    private static void sortArraySelectionSort(int[] theArray) {
+        int lowestIndex = 0;
+        int memory;
+        boolean isLowerElemFound = false;
+
+        for (int pass = 0; pass < theArray.length; pass++) {
+            for (int currentIndex = pass; currentIndex < theArray.length; currentIndex++) {
+                if(theArray[currentIndex] < theArray[lowestIndex]){
+                    lowestIndex = currentIndex;
+                    isLowerElemFound = true;
+                }
+            }
+
+            if(isLowerElemFound){
+                memory = theArray[lowestIndex];
+                theArray[lowestIndex] = theArray[pass];
+                theArray[pass] = memory;
+                lowestIndex = pass;
+                isLowerElemFound = false;
+            }
+            lowestIndex = pass+1;
+        }
     }
 
     private static void sortArrayBubbleSort(int[] arrayToSort) {
@@ -20,15 +43,15 @@ public class Sorting {
 
             for (int currentElement = 0; currentElement < updatedLength; currentElement++) {
 
-                if(currentElement+1 >= updatedLength)
+                if (currentElement + 1 >= updatedLength)
                     continue;
 
-                if(arrayToSort[currentElement] > arrayToSort[currentElement+1]){
+                if (arrayToSort[currentElement] > arrayToSort[currentElement + 1]) {
                     int mem = arrayToSort[currentElement];
-                    arrayToSort[currentElement] = arrayToSort[currentElement+1];
-                    arrayToSort[currentElement+1] = mem;
+                    arrayToSort[currentElement] = arrayToSort[currentElement + 1];
+                    arrayToSort[currentElement + 1] = mem;
                 }
-                
+
             }
             --updatedLength;
 
