@@ -7,10 +7,29 @@ public class Sorting {
     private static int[] myAr = loadArrayWithElem(10);
 
     public static void main(String[] args) {
+        myAr[0]=99;
         printArray(myAr);
         // sortArrayBubbleSort(myAr);
-        sortArraySelectionSort(myAr);
+        // sortArraySelectionSort(myAr); 
+        sortArrayInsertionSort(myAr);
         printArray(myAr);
+    }
+
+    private static void sortArrayInsertionSort(int[] arry) {
+
+        for (int i = 1; i < arry.length; i++) {
+            int currentValue = arry[i];
+            int indexToCompare = i-1;
+
+            while (indexToCompare >= 0 && arry[indexToCompare] > currentValue) {
+                arry[indexToCompare+1] = arry[indexToCompare];
+                --indexToCompare;
+            }
+
+            arry[indexToCompare + 1] = currentValue;
+
+        }
+
     }
 
     private static void sortArraySelectionSort(int[] theArray) {
@@ -20,20 +39,20 @@ public class Sorting {
 
         for (int pass = 0; pass < theArray.length; pass++) {
             for (int currentIndex = pass; currentIndex < theArray.length; currentIndex++) {
-                if(theArray[currentIndex] < theArray[lowestIndex]){
+                if (theArray[currentIndex] < theArray[lowestIndex]) {
                     lowestIndex = currentIndex;
                     isLowerElemFound = true;
                 }
             }
 
-            if(isLowerElemFound){
+            if (isLowerElemFound) {
                 memory = theArray[lowestIndex];
                 theArray[lowestIndex] = theArray[pass];
                 theArray[pass] = memory;
                 lowestIndex = pass;
                 isLowerElemFound = false;
             }
-            lowestIndex = pass+1;
+            lowestIndex = pass + 1;
         }
     }
 
