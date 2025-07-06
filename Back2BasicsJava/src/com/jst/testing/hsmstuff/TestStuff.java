@@ -14,24 +14,22 @@ public class TestStuff implements Cloneable {
 
     public static void main(String[] args) throws InterruptedException {
         
-
-        // reveriseThisB();
-
-        SumInterface obj1 = new SumInterfaceClass();
-
         
-        SumInterface obj2 = (a, b) -> {
-            System.out.println("Sum is " + a+b);
-        };
-        
-        
-        obj1.doSum(1, 2);
-        obj2.doSum(1, 2);
-        
-
+        arrayWhat();
 
     }
     
+
+
+
+
+    private static void arrayWhat() {
+        int[] myAr = new int[10];
+        System.out.println(Arrays.toString(myAr));
+        myAr[1]+=1;
+        System.out.println(Arrays.toString(myAr));
+    }
+
 
 
 
