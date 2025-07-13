@@ -1,13 +1,9 @@
 package com.leetcode.medium;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 public class TopKFrequentElements {
     //347. Top K Frequent Elements
