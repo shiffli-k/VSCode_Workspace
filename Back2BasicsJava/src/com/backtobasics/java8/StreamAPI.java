@@ -1,45 +1,84 @@
 package com.backtobasics.java8;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StreamAPI {
 
     public static void main(String[] args) {
-        tryingOutBasic();
+        someBasicStream();
     }
 
-    private static void tryingOutBasic() {
-        List<Integer> nums = new ArrayList<>();
-        // loadListWithIntegers(nums);
-        loadListWithIntegersStream(nums);
+    private static void someBasicStream() {
+        List<Integer> arLst = new ArrayList<>();
+        ListNumberLoader.loadRandomNumbers(arLst, 20);
 
-        System.out.println("Current List: "+nums);
-        
-        nums.stream()
-        .filter(eachVal -> eachVal % 2 == 0)
-        .collect(Collectors.toList());
-        
-        System.out.println("Updated List: "+nums);
-        
+        System.out.println(
+            arLst.stream() // TheSource! [Producer]
+                
+                // [Intermediate]
+                .filter(eachElem -> eachElem % 2 ==0)
+                // .peek(eachElem -> System.out.println("Val: " + eachElem))
+                .distinct()
+                // .peek(eachElem -> System.out.println("Val Dist: " + eachElem))
+                .sorted(Comparator.reverseOrder())
 
+                // Consumer / Collectors
+                // .count()
 
+                // The Consumer / Collector
+                .collect(Collectors.toList())
+        );
+        
+        prntLine();
+
+        System.out.println(
+            "1: Filter & Collect \n" +
+            arLst.stream()
+            .filter(curNum -> curNum > 10)
+            .distinct()
+            .sorted(Comparator.naturalOrder())
+            .collect(Collectors.toList())
+        );
+
+        prntLine();
+
+        System.out.println(
+            "2. Map & Sorted \n" +
+            Stream.of("Zendaya", "Bob", "Alice", "James", "Jonathan", "Wick", "Aaron")
+            // .map(eachItem -> eachItem.toUpperCase())
+            .map(String::toUpperCase)
+            .sorted(Comparator.naturalOrder())
+            .collect(Collectors.toList())
+        );
+
+        prntLine();
+        // arLst = new ArrayList<>(); // Emptying it
+        System.out.println(
+            "3. Reduce(SUM & MAX) \n" + 
+            "\n Doing sum " +
+            arLst.stream()
+            // .reduce(0, (a,b) -> a+b)
+            .reduce(Integer::sum).orElse(-1)
+            
+            + "\n Doing Max " +
+            arLst.stream()
+            // .reduce(0, (a,b) -> {
+            //     if(a>b)
+            //         return a;
+            //     else
+            //         return b;
+            // })
+            .reduce(Integer::max).get()
+
+        );
     }
-
-    private static void loadListWithIntegers(List<Integer> passedList) {
-        Integer limit = (int) (Math.random() * 10);
-        for (int iterator = 0; iterator <= limit; iterator++)
-            passedList.add((int) (Math.random() * 100));
-    }
-
-    private static void loadListWithIntegersStream(List<Integer> passedList) {
-        int lmt = (int) (Math.random() * 10) + 4;
-
-        passedList.addAll(
-                new Random().ints(lmt, 1, 99)
-                        .boxed()
-                        .collect(Collectors.toList()));
+    
+    private static void prntLine(){
+        System.out.println("-------------------");
     }
 }
