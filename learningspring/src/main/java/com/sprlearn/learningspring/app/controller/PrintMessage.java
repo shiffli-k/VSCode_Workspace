@@ -1,4 +1,4 @@
-package com.sprlearn.learningspring.aop;
+package com.sprlearn.learningspring.app.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,13 +6,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sprlearn.learningspring.app.dto.ApiRequestDTO;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
+@RequestMapping(path = "/apis/v1/")
 public class PrintMessage {
 
     private static final Logger log = LoggerFactory.getLogger(PrintMessage.class);
@@ -44,4 +53,10 @@ public class PrintMessage {
         return ResponseEntity.status(HttpStatus.OK).body("Yes, " + message);
     }
 
+    @PostMapping("/jsonApi")
+    public ResponseEntity<String> jsonApiHandler(@Valid @RequestBody ApiRequestDTO reqObj) {
+        
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+    
 }
