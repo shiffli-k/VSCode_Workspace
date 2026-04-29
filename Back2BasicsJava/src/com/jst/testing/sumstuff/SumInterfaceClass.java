@@ -1,4 +1,4 @@
-package com.jst.testing.hsmstuff;
+package com.jst.testing.sumstuff;
 
 public class SumInterfaceClass implements SumInterface{
 

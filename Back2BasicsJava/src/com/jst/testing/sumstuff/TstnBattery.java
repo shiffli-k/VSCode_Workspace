@@ -1,4 +1,4 @@
-package com.jst.testing;
+package com.jst.testing.sumstuff;
 
 import java.awt.AWTException;
 import java.util.Random;

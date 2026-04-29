@@ -1,4 +1,4 @@
-package com.jst.testing.hsmstuff;
+package com.jst.testing.sumstuff;
 
 @FunctionalInterface
 public interface SumInterface {

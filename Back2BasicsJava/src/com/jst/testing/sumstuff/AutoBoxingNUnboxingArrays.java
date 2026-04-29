@@ -1,4 +1,4 @@
-package com.jst.testing;
+package com.jst.testing.sumstuff;
 
 /**
  * Summary takeaway is that Java does auto-boxing and unboxing for primitive but not for arrays!
