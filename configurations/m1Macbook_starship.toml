@@ -1,0 +1,34 @@
+# My Starship config
+"$schema" = 'https://starship.rs/config-schema.json'
+
+right_format = "$time"
+
+[character]
+success_symbol = '[➜](bold green)'
+error_symbol = "[x](bold red)"
+
+[cmd_duration]
+min_time = 0
+format = "| [$duration](bold cyan) "
+
+[time]
+disabled = false
+time_format = "%I:%M %p"
+format = '[$time](dimmed white) '
+style = 'dimmed white'
+
+[directory]
+truncation_length = 3
+truncation_symbol = "../"
+home_symbol = "~"
+
+[java]
+symbol = "☕"
+format = "| [$symbol $version](dimmed red) "
+
+[git_branch]
+format = "| [$symbol$branch](dimmed purple) "
+
+[package]
+disabled = true
+
