@@ -35,6 +35,7 @@ public class Employee implements Comparable<Employee>{
         return firstObject.emp_id == secondEmployee.emp_id;
     }
 
+    // Implemented part of Comparable Interface
     @Override
     public int compareTo(Employee o) {
         if(this.emp_id < o.emp_id)
@@ -44,5 +45,14 @@ public class Employee implements Comparable<Employee>{
         else
             return 0;
     }
+
+    
+    // ToString
+    @Override
+    public String toString() {
+        return "Employee [emp_id=" + emp_id + ", emp_name=" + emp_name + "]";
+    }
+    
+
     
 }
