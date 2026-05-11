@@ -6,12 +6,49 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public class TryingOutComparable {
+public class TryingOutComparableAndComparator {
     public static void main(String[] args) {
         // exploringWaysToCompareTwoObjects();
         // usingComparatorAndComparable();
+        usingComparator();
     }
     
+    private static void usingComparator() {
+        List<Employee> empList = loadRandomEmployeesWithDupe(10);
+        printEmpList(empList);
+        
+        //Sort - Natural Sort - Smol to big
+        System.out.println("----Natural Sort empId---");
+        Collections.sort(empList, Comparator.naturalOrder());
+        printEmpList(empList);
+        empList.sort((o1, o2) -> o1.compareTo(o2));
+        printEmpList(empList);
+        
+        // Reverse Sort
+        System.out.println("----Reverse Sort empId---");
+        Collections.sort(empList, Comparator.reverseOrder());
+        printEmpList(empList);
+        empList.sort((o1, o2) -> o2.compareTo(o1));
+        printEmpList(empList);
+        
+        // Natural Sort EmpName - Custom Sort
+        System.out.println("----Natural Sort empName---");
+        Comparator<Employee> nameCompare = (e1, e2) -> e1.getEmp_name().compareTo(e2.getEmp_name());
+        empList.sort(nameCompare);
+        printEmpList(empList);
+        Collections.sort(empList,nameCompare);
+        printEmpList(empList);
+        
+        // Natural Sort Empname - Java 8 Way
+        System.out.println("----Natural Sort empName | Modern Way---");
+        empList.sort(
+            Comparator.comparing(Employee::getEmp_name).reversed()
+        );
+        printEmpList(empList);
+        Collections.sort(empList, nameCompare.reversed());
+        printEmpList(empList);
+    }
+
     private static void usingComparatorAndComparable() {
         List<Employee> empList = loadRandomEmployeesWithDupe(10);
         printEmpList(empList);
@@ -62,7 +99,7 @@ public class TryingOutComparable {
 
     private static void printEmpList(List<Employee> empList){
         for (Employee eachEmp : empList) {
-            System.out.println(" " + eachEmp.getEmp_id());
+            System.out.println(" " + eachEmp.getEmp_id() + " | " + eachEmp.getEmp_name());
         }
         System.out.println("-----------");
         return;
