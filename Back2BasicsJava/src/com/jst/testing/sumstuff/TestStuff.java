@@ -15,7 +15,10 @@ public class TestStuff implements Cloneable {
     public static void main(String[] args) throws InterruptedException {
         
         
-        arrayWhat();
+        // arrayWhat();
+
+        Double a = Double.valueOf(1.234D);
+        int b = a.intValue();
 
     }
     
