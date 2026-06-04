@@ -37,13 +37,20 @@ public class StreamAPI_v2 {
         // 3. Find the age of the youngest user.
         // 4. Retrieve the first user who is older than 28.
         // 5. What is the difference between writing  .collect(Collectors.toList())  and  .toList()  at the end of a stream?
-
+        
         Stream<Integer> ages = Stream.of(15, 20, 25, 30, 35);
-
+        
         // int maxAge = ages.max(Integer::compareTo).orElse(0);
         // int minAge = ages.min(Integer::compareTo).orElse(0);
-        ages.filter(eachItem -> eachItem)
-        
+
+        // int lessThan18 = ages.filter(eachItem -> eachItem < 18).findFirst().get();
+        // boolean allAbove18 = ages.allMatch(eachAge -> eachAge >= 10);
+        // int youngestUser = ages.min(Integer::compareTo).get();
+        // Integer firstUserAbove28 = ages.filter(eachUserAge -> eachUserAge > 28).findFirst().get();
+
+        ages.collect(Collectors.toList());
+        ages.toList();
+
         System.out.println(
 
         );
