@@ -3,17 +3,24 @@ package com.backtobasics.java8;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import com.software.design.patterns.factory.DrawStructureFactory.useStructure;
 
 /**
  * Learning stream API once and for all!
@@ -27,7 +34,162 @@ public class StreamAPI_v2 {
         // closingUpBasicOps();
         
         // Basic Terminal Ops
-        terminalOps();
+        // terminalOps();
+
+        // Primitive Streams
+        // learningPrimitiveStreams();
+        // testingPrimitiveStreams();
+
+        // Streams returning Optional
+        exploringOptionalsInStream();
+
+    }
+
+    private static void exploringOptionalsInStream() {
+        LongStream ls = LongStream.of(1,3,5,7);
+        Stream<String> ss = Stream.of("A", "B", "C", "D");
+
+        // get() or its primitive variant of getAs[primitive] 
+        // - Bad unless there is 100% certain of null absence
+        ls
+            .filter(eachVal -> eachVal%2==0)
+            .findFirst()
+            // .getAsLong(); // bad if filter returns null
+            // .orElse(0); // sets defaut value if null | great 
+            .orElseGet(() -> 0); // Since supplier, only builds when called
+        ss
+            .filter(eachStr -> "Z".equals(eachStr))
+            .findFirst()
+            // .get(); // bad if filter returns null
+            // .orElse(new String("Not found")); //Set default value\
+            //  | since it works as a method, the object always creates regardless of null.
+            .orElseGet(() -> new String("Not found!"));
+
+        // Throw Exception
+        IntStream.of(1)
+            .filter(a -> a == 1)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No 2 found :)"));
+        
+        // IfPresent
+        Stream.of("a","c","d")
+            .filter(eachVal -> "Z".equals(eachVal))
+            .findFirst()
+            .ifPresent(foundVal -> System.out.println("Value found: " + foundVal));
+        
+        printLine();
+
+        // else for the if in IfPresent
+        Stream.of("a","c","d")
+            .filter(eachVal -> "Z".equals(eachVal))
+            .findFirst()
+            .ifPresentOrElse(
+                matchedString -> System.out.println("Value Found: " + matchedString)
+                , 
+                () -> System.out.println("No matches found! :( ")
+            );
+        
+        printLine();
+
+        // The or fallback
+        Stream.of("a","c","d")
+            .filter(eachVal -> "Z".equals(eachVal))
+            .findFirst()
+            .or(StreamAPI_v2::retursNullOnly)
+            .or(StreamAPI_v2::alsoReturnsNullOnly)
+            .ifPresentOrElse(
+                foundVal -> System.out.println("Value found: " + foundVal)
+                ,
+                () -> System.out.println("Even after all the or(), could not find it") 
+            );
+
+        printLine();
+        
+        
+    }
+
+    private static Optional<String> alsoReturnsNullOnly(){
+        return retursNullOnly();
+    }
+
+    private static Optional<String> retursNullOnly(){
+        System.out.println("returning null :)");
+        return Optional.ofNullable(null);
+    }
+
+    private static void testingPrimitiveStreams() {
+        
+        // Chal 1
+        double average = IntStream.generate(() -> new Random().nextInt(100))
+        .limit(10)
+        .filter(eachInt -> eachInt%2==0)
+        .average()
+        .orElse(0.0D);
+        System.out.println("Average is: " + average);
+
+        // Chal 2
+        List<String> binaryList = IntStream.rangeClosed(10, 20)
+        .mapToObj(Integer::toBinaryString)
+        .toList();
+        System.out.println(binaryList);
+
+        // Chal 3
+        long n = 10L;
+        long factResult = LongStream.rangeClosed(1,n)
+        .reduce(1, (result, eachVal) -> result = eachVal * result); 
+
+        System.out.println("Fact of " + n + " is " + factResult);
+
+    }
+
+    private static void learningPrimitiveStreams() {
+        /*
+        All below ways of using primitive in stream will use Stream<Integer>
+        which is expensice due to autoboxing
+        */
+
+        // Stream.of(1,2,2);
+        // Arrays.asList(1,2,3,4).stream();
+        // new ArrayList<Integer>().stream();
+
+        /*
+        Sourcing a intStream
+        */
+
+        // Range
+        IntStream.range(1, 10)
+            .sum();
+
+        // Arrays to IntStream
+        Arrays.stream(new int[]{1,2,3,4,5})
+            .sum();
+        
+        // Using MapTo
+        List<Usr> usrList = new ArrayList<>();
+        usrList.stream()
+            // .map(eachUser -> eachUser.getuSalary())
+            .mapToLong(Usr::getuSalary)
+            .max()
+            .orElse(0);
+        
+        // Unique Stream Functions
+        IntStream strm = IntStream.of(1,2,3);
+
+        // Streams are exhaustive, can only be used once!!
+        // strm.sum();
+        // strm.average();
+        // strm.min();
+        // strm.max();
+        // Below will do all above
+        IntSummaryStatistics stats = strm.summaryStatistics();
+
+        strm.boxed();
+       
+       System.out.println(
+        "Stats: " + 
+        stats
+       );
+
 
     }
 

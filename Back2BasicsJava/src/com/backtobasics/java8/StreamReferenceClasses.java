@@ -17,6 +17,7 @@ public class StreamReferenceClasses {
 class Usr {
     private String uname;
     private List<String> uEmails;
+    private long uSalary;
 
     public Usr(String uname, String... uEmails) {
         this.uname = uname;
@@ -38,6 +39,16 @@ class Usr {
     public void setuEmails(List<String> uEmails) {
         this.uEmails = uEmails;
     }
+
+    public long getuSalary() {
+        return uSalary;
+    }
+
+    public void setuSalary(long uSalary) {
+        this.uSalary = uSalary;
+    }
+
+    
 
 }
 /* Level 1 - Easy | END */
