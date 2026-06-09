@@ -193,3 +193,16 @@ class Profile {
     }
 
 }
+
+record Product(String name, String category, int price) {
+}
+
+record EmpDep(String lastName, String department){
+}
+
+record OrdersChal(String name, boolean isPremiumCustomer, int invoiceAmt) {
+}
+
+record Tickets(String ticketId, String category, String priority){
+    
+}

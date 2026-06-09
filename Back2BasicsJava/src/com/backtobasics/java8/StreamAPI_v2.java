@@ -2,9 +2,12 @@ package com.backtobasics.java8;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.BiConsumer;
@@ -15,6 +18,7 @@ import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -41,7 +45,170 @@ public class StreamAPI_v2 {
         // testingPrimitiveStreams();
 
         // Streams returning Optional
-        exploringOptionalsInStream();
+        // exploringOptionalsInStream();
+
+        // Collectors
+        exploringCollectors();
+        // additionalChallenges();
+
+    }
+
+    private static void additionalChallenges() {
+        /*
+        Challenge 1: The ID Indexer (Map Collision Prevention)
+        Scenario: You are loading a list of Product entities from a database cache to build an in-memory index. However, because of a legacy data bug, some products might share the exact same productId.
+        Your Goal: Collect a Stream<Product> into a Map<String, Product>, where the key is the productId. If a duplicate ID shows up, keep the product that has the higher price.
+        Hint: You need the 3-argument version of Collectors.toMap(). Your merge function lambda will need to compare prod1.getPrice() and prod2.getPrice().
+        */
+        Stream<Product> prodStream = Stream.of(
+            new Product("n1", "c1", 100),
+            new Product("n1", "c1", 200),
+            new Product("n2", "c1", 100)
+        );
+
+        System.out.println(
+            prodStream.collect(
+                Collectors.toMap(Product::name, Function.identity(), (existing, incoming) ->existing.price() >= incoming.price() ? existing : incoming)
+            )
+        );
+
+        /*
+        Challenge 2: The E-Commerce Split (Partitioning)
+        
+        Scenario: You have a stream of Order objects. Each order has a method isPremiumCustomer() (returns a boolean) and getInvoiceAmount() (returns an integer).
+        
+        Your Goal: You need to split the orders into two buckets: Premium customers vs Regular customers. But instead of getting their full order history, your manager only wants to see the total sum of invoice amounts for each group.
+        Expected Output Structure: Map<Boolean, Integer>
+        
+        Hint: Use Collectors.partitioningBy(). For the second argument (the downstream collector), don't pass the default—use the numeric collector we talked about for summing values up.
+        */
+        Stream.of(
+            new OrdersChal("u1", false, 100),
+            new OrdersChal("u1", false, 200),
+            new OrdersChal("u2", true, 100),
+            new OrdersChal("u2", true, 200),
+            new OrdersChal("u2", true, 300)
+        )
+        .collect(Collectors.partitioningBy(
+            OrdersChal::isPremiumCustomer
+            ,
+            Collectors.summingInt(OrdersChal::invoiceAmt)
+            )
+        ).forEach((key, val) -> {
+            if(key) System.out.println("Premium customers spent: " + val);
+            else System.out.println("NonPremium customer spent: " + val);
+        });
+
+
+        /*
+        Challenge 3: Redacting the "Syllabus" (The Rematch!)
+
+        Scenario: Let's conquer that nesting fear. You have a list of Ticket objects for a tech support system. Each ticket has a getCategory() (e.g., "Hardware", "Software") and a getPriority() (e.g., "LOW", "HIGH", "CRITICAL").
+
+        Your Goal: Group the tickets by their category. But for the map's value, you don't want a list of entire ticket objects; you only want a Set<String> of the unique priority levels present in that category.
+        Expected Output Structure: Map<String, Set<String>>
+
+        Hint: This is structured exactly like the employee department problem. Use Collectors.groupingBy() as your base, and nest a Collectors.mapping() inside it to extract the priority strings into a Collectors.toSet().
+        */
+
+        Stream.of(
+            new Tickets("1", "HARDWARE", "LOW"),
+            new Tickets("2", "HARDWARE", "LOW"),
+            new Tickets("3", "SOFTWARE", "MEDIUM"),
+            new Tickets("4", "SOFTWARE", "MEDIUM"),
+            new Tickets("5", "SOFTWARE", "HIGH")
+        )
+        .collect(
+            Collectors.groupingBy(Tickets::category, Collectors.mapping(Tickets::priority, Collectors.toSet()))
+        ).forEach((k, v) -> {
+         System.out.println(k+" "+v);   
+        });
+
+    }
+
+    private static void exploringCollectors() {
+
+        Stream<Product> productStream = Stream.of(
+            new Product("N1", "C1", 100),
+            new Product("N2", "C2", 200),
+            new Product("N3", "C2", 200),
+            new Product("N4", "C1", 200)
+        );
+        // 1. ToList, ToMap, ToSet
+        // Unlike Normal Map, Stream map uses Fail-Fast as it throws exception if key is present
+        // Use mergeFunction Argument to let map know to keep original or keep new.
+        // For pulling to List/Set
+        // productStream
+        // .map(eachProd -> eachProd.name())
+        // .collect(Collectors.toList());
+        // .collect(Collectors.toSet());
+        // .collect(Collectors.toMap(Product::name, Product::category));
+        // .collect(Collectors.toMap(Product::name, Product::category, (t, u) -> t));
+
+        // 2. Joining(), joining(separator), joining(separator, prefix, suffix)
+        System.out.println(
+            Stream.of(1,2,3,4,5,6,7)
+            .filter(val -> val%2 == 0)
+            .map(eachNum -> eachNum.toString())
+            // .collect(Collectors.joining("|"))
+            .collect(Collectors.joining("|", "(", ")"))
+        );
+
+        // 3. Numeric aggregation
+        
+        // productStream
+
+        // .collect(Collectors.counting());
+        // .collect(Collectors.summingInt(Product::price))
+        // .collect(Collectors.averagingInt(Product::price));
+
+        // Better if done this way.
+        // .mapToInt(Product::price)
+        // .count(); 
+        // .sum();
+        // .average();
+
+        // Grouping and Partitioning
+        Map<Integer, Long> existingMap = new HashMap<>();
+        System.out.println(
+            "\n--Grouping and Aggregation--\n"+
+            productStream
+
+            // Basic Group
+            // .collect(Collectors.groupingBy(Product::category)) // Returns Map
+            // .get("C1")
+
+            // Group with reduce
+            // .collect(Collectors.groupingBy(Product::price, Collectors.counting()))
+            
+            // Group with Load
+            // .collect(Collectors.groupingBy(Product::price,() -> existingMap, Collectors.counting()))
+            // +"\n"+existingMap
+
+
+            // Partition
+            .collect(Collectors.partitioningBy(eachProd -> eachProd.price() > 150))
+            // .collect(Collectors.partitioningBy(eachProd -> eachProd.price() > 150, Collectors.counting()))
+        );
+
+        // Quizing Q3
+        List<EmpDep> empList = List.of(
+            new EmpDep("e1", "Dep1"),
+            new EmpDep("e2", "Dep1"),
+            new EmpDep("e3", "Dep2"),
+            new EmpDep("e4", "Dep2"),
+            new EmpDep("e5", "Dep3")
+        );
+
+        System.out.println(
+            empList.stream()
+            .collect(Collectors.groupingBy(
+                    EmpDep::department, 
+                    // Collectors.toSet()
+                    Collectors.mapping(EmpDep::lastName, Collectors.toList())
+                ))
+        );
+
 
     }
 
