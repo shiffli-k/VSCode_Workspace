@@ -206,3 +206,5 @@ record OrdersChal(String name, boolean isPremiumCustomer, int invoiceAmt) {
 record Tickets(String ticketId, String category, String priority){
     
 }
+
+record Order2(String id, String category, double amount) {}

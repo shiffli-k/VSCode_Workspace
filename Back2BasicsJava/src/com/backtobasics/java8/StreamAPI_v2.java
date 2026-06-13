@@ -48,9 +48,47 @@ public class StreamAPI_v2 {
         // exploringOptionalsInStream();
 
         // Collectors
-        exploringCollectors();
+        // exploringCollectors();
         // additionalChallenges();
+        advancedCollectors();
 
+    }
+
+    private static void advancedCollectors() {
+        Stream.of(
+            new Order2("1", "c1", 150),
+            new Order2("2", "c1", 160),
+            new Order2("3", "c2", 100),
+            new Order2("4", "c2", 100),
+            new Order2("5", "c2", 110),
+            new Order2("6", "c2", 100),
+            new Order2("7", "c3", 550)
+        )
+
+        // Problem 1
+        // .collect(
+
+        //     Collectors.groupingBy(
+        //         Order2::category, 
+        //         Collectors.collectingAndThen(
+        //             Collectors.averagingDouble(Order2::amount), 
+        //             eachVal -> String.format("%.2f", eachVal)
+        //         )
+        //     )
+
+        // )
+        // .forEach((t, u) -> System.out.println(t+" "+u));
+
+        // Problem 2
+        .collect(
+            Collectors.toMap(
+                Order2::category, 
+                Order2::amount, 
+                Math::max     
+            )
+        ).forEach(
+            (category, amount) -> System.out.println(category+" "+amount)
+        );
     }
 
     private static void additionalChallenges() {
@@ -99,6 +137,7 @@ public class StreamAPI_v2 {
             else System.out.println("NonPremium customer spent: " + val);
         });
 
+        printLine();
 
         /*
         Challenge 3: Redacting the "Syllabus" (The Rematch!)
@@ -116,12 +155,22 @@ public class StreamAPI_v2 {
             new Tickets("2", "HARDWARE", "LOW"),
             new Tickets("3", "SOFTWARE", "MEDIUM"),
             new Tickets("4", "SOFTWARE", "MEDIUM"),
-            new Tickets("5", "SOFTWARE", "HIGH")
+            new Tickets("5", "SOFTWARE", "HIGH"),
+            new Tickets("6", "HARDWARE", "HIGH")
         )
         .collect(
-            Collectors.groupingBy(Tickets::category, Collectors.mapping(Tickets::priority, Collectors.toSet()))
-        ).forEach((k, v) -> {
-         System.out.println(k+" "+v);   
+            // Single Group By
+            // Collectors.groupingBy(Tickets::category, Collectors.mapping(Tickets::priority, Collectors.toSet()))
+
+            // Trying MultiGroup By
+            Collectors.groupingBy(Tickets::category, 
+                    // Collectors.groupingBy(Tickets::priority)
+                    // Collectors.groupingBy(Tickets::priority, Collectors.counting())
+                    Collectors.groupingBy(Tickets::priority, Collectors.mapping(Tickets::ticketId, Collectors.toList()))
+            )
+        )
+        .forEach((k, v) -> {
+         System.out.println("Key: ("+k+") | Value: ("+v+")");   
         });
 
     }
