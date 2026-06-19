@@ -18,10 +18,10 @@ public class MyAppFilter implements Filter{
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         
-        log.info("Intercepted for Filer - Started");
-        System.out.println("Filtered");
+        // log.info("Intercepted for Filer - Started");
+        // System.out.println("Filtered");
         chain.doFilter(req, resp);
-        log.info("Intercepted for Filer - Completed");
+        // log.info("Intercepted for Filer - Completed");
         
     }
 

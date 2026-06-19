@@ -1,5 +1,6 @@
 package com.backtobasics.java8;
 
+import java.lang.module.FindException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -50,7 +52,56 @@ public class StreamAPI_v2 {
         // Collectors
         // exploringCollectors();
         // additionalChallenges();
-        advancedCollectors();
+        // advancedCollectors();
+
+        // Stream helpers
+        // lookingAtStreamHelpers();
+
+        System.err.println(
+            Runtime.getRuntime().availableProcessors()
+        );
+
+    }
+
+    private static void lookingAtStreamHelpers() {
+        // asLongStream(), asDoubleStream(), mapToObj()
+
+        IntStream.of(1,2,3,4,56,67,7,8)
+        // .mapToLong(value -> value)
+        .mapToLong(Long::valueOf)
+        // .asLongStream()
+        // .boxed()
+        .sum();
+
+        printLine();
+
+        DoubleStream.of(1.42D,5.53D,21.332D, 54.1095D)
+        .toArray();
+
+        System.out.println(
+            "Double Array: " + 
+            Arrays.toString(
+            
+                DoubleStream.generate(Math::random)
+                .limit(10)
+                .toArray()
+
+            )
+        );
+
+        printLine();
+
+        IntStream is1 = IntStream.of(1,5,6,4,6,8);
+        IntStream is2 = IntStream.of(5,6,4,7,8);
+        
+        System.out.println(
+            IntStream.concat(is1, is2)
+            .count()
+        );
+
+        printLine();
+
+        List.of(1,2,3,4).parallelStream();
 
     }
 
