@@ -1,5 +1,6 @@
 package com.backtobasics.java8;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -208,3 +209,39 @@ record Tickets(String ticketId, String category, String priority){
 }
 
 record Order2(String id, String category, double amount) {}
+
+record LoginAttempt(String username, boolean isSuccess, int failedAttemptsBeforeSuccess) {}
+
+record SensorReading(LocalTime time, double temperatureCelsius) {}
+
+record DeploymentEvent(LocalTime time, String status) {}
+
+record UserAccount(String accountId, String ownerName, double[] recentTransactionAmounts) {}
+
+record User(String userId, List<Device> devices) {}
+
+class Device {
+    private String deviceToken;
+    private boolean isNotificationsEnabled;
+
+	public Device(String deviceToken, boolean isNotificationsEnabled) {
+		this.deviceToken = deviceToken;
+		this.isNotificationsEnabled = isNotificationsEnabled;
+	}
+    
+	public String getDeviceToken() {
+		return deviceToken;
+	}
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
+	}
+	public boolean isNotificationsEnabled() {
+		return isNotificationsEnabled;
+	}
+	public void setNotificationsEnabled(boolean isNotificationsEnabled) {
+		this.isNotificationsEnabled = isNotificationsEnabled;
+	}
+
+    
+
+}

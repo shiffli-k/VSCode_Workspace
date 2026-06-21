@@ -1,19 +1,23 @@
 package com.backtobasics.java8;
 
 import java.lang.module.FindException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
@@ -52,7 +56,7 @@ public class StreamAPI_v2 {
         // Collectors
         // exploringCollectors();
         // additionalChallenges();
-        // advancedCollectors();
+        // // advancedCollectors();
 
         // Stream helpers
         // lookingAtStreamHelpers();
@@ -103,6 +107,228 @@ public class StreamAPI_v2 {
 
         List.of(1,2,3,4).parallelStream();
 
+        // Reduction
+        // learningReduction();
+
+        // Stream Slicers
+        // streamSlicing();
+
+        // flatMap variants
+        tryingOutFlatMapVariants();
+        
+        // int[] randoNum = new Random()
+        int[] randoNum = ThreadLocalRandom.current()
+            .ints(10, 0, 100)
+            .toArray();
+        
+        System.out.println(
+            Arrays.toString(randoNum)
+        );
+
+    }
+
+    private static void tryingOutFlatMapVariants() {
+        DoubleSummaryStatistics statsOfTransactions = Stream.of(
+            new UserAccount("ID1", "U1", new double[]{2.5D, 5.9D, 3.0D, 5.334D}),
+            new UserAccount("ID2", "U2", new double[]{5.3D, 2.6D, 1.20D, 9.0D})
+        )
+        .flatMapToDouble(eachAccount -> Arrays.stream(eachAccount.recentTransactionAmounts()))
+        .summaryStatistics();
+
+        System.out.println("Sum: " + statsOfTransactions.getSum());
+
+        printLine();
+
+        List<String> listOfDeviceIDs = Stream.of(
+            new User("U1", 
+                List.of(
+                    new Device("U1D1", false),
+                    new Device("U1D2", true)
+                )
+            ),
+            new User("U2", 
+                List.of(
+                    new Device("U2D1", false),
+                    new Device("U2D2", true),
+                    new Device("U2D3", true)
+                )
+            )
+        )
+
+        // 1. Direct Approach
+        // .flatMap(eachUser -> eachUser.devices().stream())
+        // .filter(Device::isNotificationsEnabled)
+        // .map(Device::getDeviceToken)
+
+        // 2. Second Approach
+        .flatMap(eachUser -> {
+            return eachUser.devices().stream()
+                .filter(Device::isNotificationsEnabled)
+                .map(Device::getDeviceToken);
+        })
+
+        .toList();
+
+        System.out.println("Notification Enabled IDs: " + listOfDeviceIDs);
+	}
+
+	private static void streamSlicing() {
+        System.out.println(
+
+            // These are basically limit and drop with conditions
+
+            Stream.of(1,2,3,4,10,6,7,8,9)
+            // .takeWhile(eachVal -> eachVal < 9)
+            .dropWhile(eachVal -> eachVal < 9)
+            .collect(ArrayList::new, ArrayList::add, ArrayList::add)
+
+        );
+
+        printLine();
+
+        Stream.of(
+            new SensorReading(LocalTime.now().minusMinutes(6), 36.0D),
+            new SensorReading(LocalTime.now().minusMinutes(5), 24.0D),
+            new SensorReading(LocalTime.now().minusMinutes(4), 19.0D),
+            new SensorReading(LocalTime.now().minusMinutes(3), 12.0D),
+            new SensorReading(LocalTime.now().minusMinutes(2), 6.0D),
+            new SensorReading(LocalTime.now().minusMinutes(1), 4.0D),
+            new SensorReading(LocalTime.now().minusMinutes(0), 4.0D)
+        )
+
+        /// 1 MisUnderstood the requirement
+        // .forEach(eachReading -> System.out.println(eachReading.time() + " | " + eachReading.temperatureCelsius()));
+        // .mapToDouble(SensorReading::temperatureCelsius)
+        // .dropWhile(eachTemp -> Double.compare(eachTemp, 4.0D) > 0)
+        // .forEach(System.out::println);
+        // .boxed().toList();
+
+        /// 2 Fixing it properly
+        .dropWhile(eachReading -> Double.compare(eachReading.temperatureCelsius(), 4.0D) > 0)
+        .toList();
+
+        printLine();
+
+        System.out.println(
+
+            Stream.of(
+                new DeploymentEvent(LocalTime.now(), "STARTING"),
+                new DeploymentEvent(LocalTime.now(), "STARTING"),
+                new DeploymentEvent(LocalTime.now(), "TESTING"),
+                new DeploymentEvent(LocalTime.now(), "RUNNING"),
+                new DeploymentEvent(LocalTime.now(), "RUNNING"),
+                new DeploymentEvent(LocalTime.now(), "HEALTHY"),
+                new DeploymentEvent(LocalTime.now(), "HEALTHY"),
+                new DeploymentEvent(LocalTime.now(), "LOADED"),
+                new DeploymentEvent(LocalTime.now(), "HEALTHY")
+            )
+            .dropWhile(eachEvent -> !"RUNNING".equals(eachEvent.status()))
+            .takeWhile(eachEvent -> !"HEALTHY".equals(eachEvent.status()))
+            .toList()
+
+        );
+        
+    }
+
+    private static void learningReduction() {
+
+        // Good ol reduce
+        Integer result = Stream.of(1,2,3,4,5,6)
+
+        // 1. Basic - Returns Optional<> | Okay but best avoid it
+        // .reduce((accumulated, currentIncoming) -> {
+        //     System.out.println(accumulated + " " + currentIncoming);
+        //     return accumulated + currentIncoming;
+        // })
+        // .orElseGet(() -> Integer.valueOf(-1));
+
+        // 2. Better - Provide a starter Value | better to use than the above basic
+        .reduce(10, (accumulated, currentIncoming) -> {
+            System.out.println(accumulated + " " + currentIncoming);
+            return accumulated + currentIncoming;
+        });
+
+        System.out.println("Result: " + result);
+
+        printLine();
+
+        // Combiner for Parallel Stream | Mutable Reduction
+
+        BinaryOperator<Integer> accumulateBiOp = (a,b) -> {
+            System.out.println(a+" "+b+" | " + Thread.currentThread().getName());
+            return a+b;
+        };
+        BiFunction<Integer, Integer, Integer> accumulate = Integer::sum;
+        BiFunction<Integer, Integer, Integer> accumulate2 = (firstArg, secondArg) -> {
+            // No need to be this explicit, Java will autobox and unbox anyway
+            return Integer.valueOf(firstArg.intValue()+secondArg.intValue());
+        };
+
+        Integer res2 = List.of(1,2,3,4,5,6)
+        .parallelStream()
+        .reduce(1, 
+            // (accumulated, incoming) -> incoming + accumulated,
+            accumulate,
+            accumulateBiOp 
+        );
+
+        System.out.println("Reduce Parallel: " + res2);
+
+        printLine();
+
+        System.out.println(
+            Stream.of(1,2,3,4,5,6,7)
+            .mapToInt(Integer::intValue)
+            .sum()
+        );
+
+        printLine();
+
+        // Mutable Reduction | cannot be achieved with reduce
+        // Supplier - accumulator - combiner | Best way to reduce to a single Object
+
+        BiConsumer<StringBuilder, String> appenderWithSpace = 
+            (theStringBuilder, incomingString) -> 
+                theStringBuilder.append(incomingString+"_");
+        
+        BiConsumer<StringBuilder, StringBuilder> parallelAppender = 
+            (sb1, sb2) -> sb1.append("|"+sb2.toString());
+
+
+        System.out.println(
+
+            Stream.of("Hello and welcome to Java Stream API. This is awesome! I can like keep typing and I am be sure that the stream API's ParallelStream's infinite wisdon will surely organize all these random words that I am typing and then safely ensure all the threads return in order. Like wow, this is awesome! idk how it works! but I am sure Gemini will let me know once it tokenizes all these words that I am saying. Beep Bop Boop, Words tokenized!"
+                .split(" ")
+                )
+                // .peek(System.out::println)
+                // .collect(Collectors.counting()).
+                .parallel()
+                .collect(StringBuilder::new,
+                    appenderWithSpace,
+                    parallelAppender
+                ).toString()
+        );
+
+        // Quizing - 
+        result = Stream.of(
+            new LoginAttempt("u1", false, 10),
+            new LoginAttempt("u2", false, 1),
+            new LoginAttempt("u1", false, 4),
+            new LoginAttempt("u2", false, 6),
+            new LoginAttempt("u2", false, 0),
+            new LoginAttempt("u3", false, 1),
+            new LoginAttempt("u1", false, 0)
+        )
+        // .mapToInt(LoginAttempt::failedAttemptsBeforeSuccess) // Optimal but I am forced to use the 3param reduce
+        .map(LoginAttempt::failedAttemptsBeforeSuccess)
+        .parallel()
+        .reduce(
+            0, // Since addition, best start with 0
+            Integer::sum,
+            Integer::sum
+        );
+
+        System.out.println("Quiz: " + result);
     }
 
     private static void advancedCollectors() {
@@ -119,13 +345,13 @@ public class StreamAPI_v2 {
         // Problem 1
         // .collect(
 
-        //     Collectors.groupingBy(
-        //         Order2::category, 
-        //         Collectors.collectingAndThen(
-        //             Collectors.averagingDouble(Order2::amount), 
-        //             eachVal -> String.format("%.2f", eachVal)
-        //         )
-        //     )
+            // Collectors.groupingBy(
+            //     Order2::category, 
+            //     Collectors.collectingAndThen(
+            //         Collectors.averagingDouble(Order2::amount), 
+            //         eachVal -> String.format("%.2f", eachVal)
+            //     )
+            // )
 
         // )
         // .forEach((t, u) -> System.out.println(t+" "+u));
@@ -287,8 +513,8 @@ public class StreamAPI_v2 {
 
 
             // Partition
-            .collect(Collectors.partitioningBy(eachProd -> eachProd.price() > 150))
-            // .collect(Collectors.partitioningBy(eachProd -> eachProd.price() > 150, Collectors.counting()))
+            // .collect(Collectors.partitioningBy(eachProd -> eachProd.price() > 150))
+            .collect(Collectors.partitioningBy(eachProd -> eachProd.price() > 150, Collectors.counting()))
         );
 
         // Quizing Q3
