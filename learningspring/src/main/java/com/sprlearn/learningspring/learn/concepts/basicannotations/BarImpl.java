@@ -2,7 +2,7 @@ package com.sprlearn.learningspring.learn.concepts.basicannotations;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component()
 public class BarImpl implements FooBarInterface{
 
     @Override

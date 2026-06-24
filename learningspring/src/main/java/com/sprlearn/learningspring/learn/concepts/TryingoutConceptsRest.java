@@ -6,17 +6,22 @@ import com.sprlearn.learningspring.learn.concepts.basicannotations.BarImpl;
 import com.sprlearn.learningspring.learn.concepts.basicannotations.FooBarInterface;
 import com.sprlearn.learningspring.learn.concepts.basicannotations.FooImpl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-public class TryingoutConcepts {
+@RequestMapping(path = "/rest")
+public class TryingoutConceptsRest {
 
     private final FooBarInterface fb;
 
-    public TryingoutConcepts(FooBarInterface fbImpl){
+    // Technically this is Autowired via Constructor Injection
+    public TryingoutConceptsRest(@Qualifier(value = "barImpl") FooBarInterface fbImpl){
         this.fb = fbImpl;
     }
 

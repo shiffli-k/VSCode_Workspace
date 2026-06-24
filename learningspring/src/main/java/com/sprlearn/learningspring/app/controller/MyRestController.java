@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping(path = "/apis/v1/")
-public class PrintMessage {
+public class MyRestController {
 
-    private static final Logger log = LoggerFactory.getLogger(PrintMessage.class);
+    private static final Logger log = LoggerFactory.getLogger(MyRestController.class);
 
     @PostConstruct
     private void onCreation(){
