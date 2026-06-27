@@ -7,3 +7,18 @@ spring:
 springdoc:
   api-docs:
     enabled: false
+
+
+# Simple Application Properties
+myapp:
+  prop:
+    fooString: CustomFooString
+    fooInteger: 99
+    fooBoolean: False
+
+# Complex/Large Application Properties | build read
+complex:
+  myapp:
+    prop1: Val1
+    prop2: Val2
+    prop3: Val3
