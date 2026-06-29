@@ -1,18 +1,21 @@
-package com.sprlearn.learningspring.learn.concepts;
+package com.sprlearn.learningspring.learn.concepts.tryingout.rest;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sprlearn.learningspring.learn.concepts.basicannotations.BarImpl;
 import com.sprlearn.learningspring.learn.concepts.basicannotations.FooBarInterface;
-import com.sprlearn.learningspring.learn.concepts.basicannotations.FooImpl;
 import com.sprlearn.learningspring.learn.concepts.beanscope.prototype.TrackerIDService;
+import com.sprlearn.learningspring.learn.concepts.errorhandling.rest.IncorrectApiParameterException;
 import com.sprlearn.learningspring.learn.concepts.properties.PropertiesComplex;
-import com.sprlearn.learningspring.learn.concepts.properties.PropertiesComplexConfig;
 import com.sprlearn.learningspring.learn.concepts.properties.PropertiesSimple;
 import com.sprlearn.learningspring.learn.concepts.properties.PropertiesSystem;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(path = "/rest")
+@Lazy
 public class TryingoutConceptsRest {
 
     private final FooBarInterface fb;
@@ -29,6 +33,8 @@ public class TryingoutConceptsRest {
     private final PropertiesSystem sysProp;
     private final PropertiesComplex compProp;
 
+    private final Logger log = LoggerFactory.getLogger(TryingoutConceptsRest.class);
+
     // Technically this is Autowired via Constructor Injection
     public TryingoutConceptsRest(@Qualifier(value = "bar") FooBarInterface fbImpl, TrackerIDService idServ, PropertiesSimple simplePropertiesObj, PropertiesSystem systemProperties, PropertiesComplex complxProp){
         this.fb = fbImpl;
@@ -36,11 +42,22 @@ public class TryingoutConceptsRest {
         this.sProp = simplePropertiesObj;
         this.sysProp = systemProperties;
         this.compProp = complxProp;
+        log.error("Constructor Called");
+    }
+
+    @PostConstruct
+    public void initialize(){
+        log.error("Initialized");
+    }
+
+    @PreDestroy
+    public void cleanup(){
+        log.error("Destorying");
     }
 
 
     @GetMapping(path = "/")
-    public ResponseEntity<String> base(@RequestParam(defaultValue = "none", name = "p") String param1) {
+    public ResponseEntity<String> base(@RequestParam(defaultValue = "none", name = "p") String param1) throws Exception {
         StringBuilder respMessage = new StringBuilder("Received: " + param1 + "\n");
 
         addMessageToBuilder(respMessage, fb.doSomething());
@@ -61,6 +78,12 @@ public class TryingoutConceptsRest {
         addMessageToBuilder(respMessage, "--Configurationproperties--");
         addMessageToBuilder(respMessage, compProp.prop1());
         addMessageToBuilder(respMessage, compProp.toString());
+
+        // Controller Advice
+        if("error".equals(param1)){
+            // throw new Exception("The param p should not have value as error");
+            throw new IncorrectApiParameterException("Request param p cannot have value as error");
+        }
 
         return ResponseEntity.ok(respMessage.toString());
     }
