@@ -2,6 +2,18 @@
 spring:
   profiles:
     active: base
+# JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2c
+  datasource:
+    url: jdbc:h2:mem:localdb
 
 # DisablingSwagger
 springdoc:
@@ -22,3 +34,4 @@ complex:
     prop1: Val1
     prop2: Val2
     prop3: Val3
+

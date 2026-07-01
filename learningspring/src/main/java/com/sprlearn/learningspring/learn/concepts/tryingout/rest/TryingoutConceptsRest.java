@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sprlearn.learningspring.learn.concepts.basicannotations.FooBarInterface;
 import com.sprlearn.learningspring.learn.concepts.beanscope.prototype.TrackerIDService;
+import com.sprlearn.learningspring.learn.concepts.datajpa.entities.ProductEntity;
+import com.sprlearn.learningspring.learn.concepts.datajpa.repos.ProductRepository;
+import com.sprlearn.learningspring.learn.concepts.datajpa.service.ProductService;
 import com.sprlearn.learningspring.learn.concepts.errorhandling.rest.IncorrectApiParameterException;
 import com.sprlearn.learningspring.learn.concepts.properties.PropertiesComplex;
 import com.sprlearn.learningspring.learn.concepts.properties.PropertiesSimple;
@@ -14,6 +17,7 @@ import jakarta.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +36,27 @@ public class TryingoutConceptsRest {
     private final PropertiesSimple sProp;
     private final PropertiesSystem sysProp;
     private final PropertiesComplex compProp;
+    private final ProductService productService;
 
     private final Logger log = LoggerFactory.getLogger(TryingoutConceptsRest.class);
 
     // Technically this is Autowired via Constructor Injection
-    public TryingoutConceptsRest(@Qualifier(value = "bar") FooBarInterface fbImpl, TrackerIDService idServ, PropertiesSimple simplePropertiesObj, PropertiesSystem systemProperties, PropertiesComplex complxProp){
+    // @Autowired
+    public TryingoutConceptsRest(
+            @Qualifier(value = "bar") FooBarInterface fbImpl,
+            TrackerIDService idServ,
+            PropertiesSimple simplePropertiesObj,
+            PropertiesSystem systemProperties,
+            PropertiesComplex complxProp,
+            ProductService productServiceBean
+        ){
         this.fb = fbImpl;
         this.idServ = idServ;
         this.sProp = simplePropertiesObj;
         this.sysProp = systemProperties;
         this.compProp = complxProp;
-        log.error("Constructor Called");
+        this.productService = productServiceBean;
+        // log.error("Constructor Called");
     }
 
     @PostConstruct
@@ -87,6 +101,15 @@ public class TryingoutConceptsRest {
 
         return ResponseEntity.ok(respMessage.toString());
     }
+
+    @GetMapping(path = "/jpa")
+    public String getMethodName() {
+
+        productService.tryingWithoutTransaction();
+
+        return new String("Completed");
+    }
+    
 
     private void addMessageToBuilder(StringBuilder stringBuilderToAdd, String messageToAppend){
         stringBuilderToAdd.append("> " + messageToAppend + "\n");
