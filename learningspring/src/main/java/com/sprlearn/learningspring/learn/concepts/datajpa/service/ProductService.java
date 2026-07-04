@@ -22,13 +22,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public void tryingWithoutTransaction(){
-        UUID lookUpID = UUID.fromString("c4408a45-0ae3-4813-b8e7-2481189e05f3");
-        // productRepo.findAll().get(0);
-
-        // below doesnt actually get the value:
-        // ProductEntity aProduct = productRepo.getById(UUID.fromString("c4408a45-0ae3-4813-b8e7-2481189e05f3"));
-
-        ProductEntity aProduct = productRepo.findById(lookUpID).orElseThrow();
+        ProductEntity aProduct = productRepo.findAll().stream().findFirst().orElseThrow();
 
         log.info("Fetched: " + 
             aProduct

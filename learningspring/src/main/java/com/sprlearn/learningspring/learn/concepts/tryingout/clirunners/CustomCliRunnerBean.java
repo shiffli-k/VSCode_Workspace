@@ -44,11 +44,11 @@ public class CustomCliRunnerBean implements CommandLineRunner {
 
         log.info("Loading Temporary Values for Repo ");
         List<ProductEntity> prodList =  List.of(
-            new ProductEntity(UUID.fromString("c4408a45-0ae3-4813-b8e7-2481189e05f3"), "Product1", 20.00D, "AED"),
-            new ProductEntity(UUID.randomUUID(), "Product2", 10.00D, "AED"),
-            new ProductEntity(UUID.randomUUID(), "Product3", 54.20D, "AED"),
-            new ProductEntity(UUID.randomUUID(), "Product4", 94.55D, "AED"),
-            new ProductEntity(UUID.randomUUID(), "Product5", 21.00D, "AED")
+            new ProductEntity(null, "Product1", 20.00D, "AED"),
+            new ProductEntity(null, "Product2", 10.00D, "AED"),
+            new ProductEntity(null, "Product3", 54.20D, "AED"),
+            new ProductEntity(null, "Product4", 94.55D, "AED"),
+            new ProductEntity(null, "Product5", 21.00D, "AED")
         );
         productRepo.saveAll(prodList);
 
