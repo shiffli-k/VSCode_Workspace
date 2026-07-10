@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ServicebApplication<serviceb>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.learn.microservice.serviceb.ServicebApplication",
+            "projectName": "serviceb",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceaApplication<servicea>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.learn.microservice.servicea.ServiceaApplication",
+            "projectName": "servicea",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
