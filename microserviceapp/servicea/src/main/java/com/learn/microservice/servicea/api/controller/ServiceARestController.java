@@ -2,21 +2,33 @@ package com.learn.microservice.servicea.api.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.microservice.servicea.api.service.ClientApiService;
+import com.rabbitmq.client.RpcClient.Response;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 public class ServiceARestController {
 
     private final Logger log = LoggerFactory.getLogger(ServiceARestController.class);
 
+    // HTTP API Clients
     private ClientApiService javaRestClient;
+    
+    // Message Brokers
+    private RabbitTemplate rabbitMq;
+    public static final String RABBIT_MQ_QUQUE_NAME = "MyQ1";
 
-    public ServiceARestController(ClientApiService springObjJavaRestClientService){
+    public ServiceARestController(ClientApiService springObjJavaRestClientService, RabbitTemplate springBeanRabbitTemplate){
         this.javaRestClient = springObjJavaRestClientService;
+        this.rabbitMq = springBeanRabbitTemplate;
     }
     
     @GetMapping(path = "/")
@@ -30,5 +42,15 @@ public class ServiceARestController {
 
         return ResponseEntity.ok(responseMessage.toString());
     }
+
+    @PostMapping("/")
+    public ResponseEntity<String> basePath(@RequestBody String requestBody) {
+        StringBuilder response = new StringBuilder("Message Sent");
+
+        rabbitMq.convertAndSend(RABBIT_MQ_QUQUE_NAME, requestBody);
+        
+        return ResponseEntity.ok(response.toString());
+    }
+    
 
 }
