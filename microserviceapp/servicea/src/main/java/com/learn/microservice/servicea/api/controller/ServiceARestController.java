@@ -51,6 +51,19 @@ public class ServiceARestController {
         
         return ResponseEntity.ok(response.toString());
     }
+
+    @PostMapping(path = "/rabbitmq")
+    public ResponseEntity<String> learnRabbitMq(@RequestBody DTORabbitMQRequest req){
+
+        try {
+            rabbitMq.convertAndSend(req.getExchangeName(), req.getRoutingKey(), req.getMessageData());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid Req -> " + req.toString());
+        }
+
+        return ResponseEntity.ok("Pushed!");
+    }
+    
     
 
 }
