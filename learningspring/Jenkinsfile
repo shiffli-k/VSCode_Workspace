@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    environment{
+        IMAGE_NAME = "learn-spring-app"
+    }
+    stages{
+        stage(name:'Initialize - Requirements Check'){
+            steps{
+                sh 'java -version'
+                sh 'mvn -v'
+                sh 'docker version'
+                echo 'Requirements check completed'
+            }
+        }
+        stage(name: 'Cleanup and Test'){
+            steps{
+                sh 'mvn clean'
+                sh 'mvn test'
+            }
+        }
+    }
+}
