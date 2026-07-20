@@ -2,21 +2,58 @@ pipeline {
     agent any
     environment{
         IMAGE_NAME = "learn-spring-app"
+        SUB_DIR = "learningspring/" //MyFault for Having a Werird Git repo directory.
     }
+    // tools {
+    //     maven 'Maven 3.9'
+    //     jdk 'Java 25'
+    // }
     stages{
         stage('Initialize - Requirements Check'){
             steps{
-                sh 'java -version'
-                sh 'mvn -v'
-                sh 'docker version'
-                echo 'Requirements check completed'
+                dir("${env.SUB_DIR}") {
+                    sh 'java -version'
+                    sh 'mvn -v'
+                    sh 'docker version'
+                    echo 'Requirements check completed'
+                }
             }
         }
         stage('Cleanup and Test'){
             steps{
-                sh 'mvn clean'
-                sh 'mvn test'
+                dir("${env.SUB_DIR}") {
+                    sh 'mvn clean'
+                    sh 'mvn test'
+                }
             }
+        }
+        stage('Maven Package'){
+            steps{
+                dir("${env.SUB_DIR}") {
+                    sh 'mvn package -DskipTests'
+                }
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                dir("${env.SUB_DIR}") {
+                    echo "Building DockerImage as ${IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                    sh "docker tag ${IMAGE_NAME}:${env.BUILD_NUMBER} ${IMAGE_NAME}:latest"
+                }
+            }
+        }
+    }
+    post{
+        always{
+            echo "Cleaning Up Workspace"
+            cleanWs() //Nukes the work directory - Not Traceable
+        }
+        success {
+            echo "Pipeline executed successfully"
+        }
+        failure {
+            echo "Pipeling execution failed"
         }
     }
 }
