@@ -5,37 +5,39 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class TestStuff implements Cloneable {
 
     public static void main(String[] args) throws InterruptedException {
-        
-        
+
         // arrayWhat();
 
-        Double a = Double.valueOf(1.234D);
-        int b = a.intValue();
+        // Double a = Double.valueOf(1.234D);
+        // int b = a.intValue();
+
+        hmmCursedJava();
 
     }
-    
 
-
-
+    private static void hmmCursedJava() {
+        List<Void> a = List.of();
+        a.stream()
+            .filter(Objects::isNull)
+            .toList();
+    }
 
     private static void arrayWhat() {
         int[] myAr = new int[10];
         System.out.println(Arrays.toString(myAr));
-        myAr[1]+=1;
+        myAr[1] += 1;
         System.out.println(Arrays.toString(myAr));
     }
-
-
-
-
 
     private static void reveriseThisB() {
         int loadSize = 10;
@@ -50,18 +52,18 @@ public class TestStuff implements Cloneable {
     }
 
     private static void reverseit(int[] theArr) {
-        for (int i = 0, j = theArr.length-1; i < j ; i++, j--) {
+        for (int i = 0, j = theArr.length - 1; i < j; i++, j--) {
             int tmp;
             tmp = theArr[i];
-            theArr[i]=theArr[j];
-            theArr[j]=tmp;
+            theArr[i] = theArr[j];
+            theArr[j] = tmp;
         }
         System.out.println("Whoop, Reversed! I hope.");
     }
 
     private static void loadThisArr(int[] theArr, int loadNumbers) {
         for (int i = 0; i < loadNumbers; i++) {
-            theArr[i]=new Random().nextInt(100);
+            theArr[i] = new Random().nextInt(100);
         }
     }
 
