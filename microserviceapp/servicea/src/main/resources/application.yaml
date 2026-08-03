@@ -2,5 +2,20 @@ spring:
   application:
     name: servicea
 
+# RabbitMQ
+  rabbitmq:
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+# Retries
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000
+        max-retries: 3
+        multiplier: 2.0D
+
+
 server:
   port: 8001
+
