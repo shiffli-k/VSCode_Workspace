@@ -18,12 +18,34 @@ public class TestStuff implements Cloneable {
 
         // arrayWhat();
 
-        // Double a = Double.valueOf(1.234D);
-        // int b = a.intValue();
-
+        // // Double a = Double.valueOf(1.234D);
+        // // int b = a.intValue();
+        
+        methodA();
+        
         hmmCursedJava();
-
     }
+    
+    private static void methodA() {
+        methodB();
+        System.out.println("Continue A");
+    }
+
+    private static void methodB() {
+
+        
+        try {
+            int result = 1/0;
+            throw new NullPointerException("Exception Occured");            
+        } catch (RuntimeException e) {
+            // TODO: handle exception
+        }
+    }
+
+
+
+
+
 
     private static void hmmCursedJava() {
         List<Void> a = List.of();
