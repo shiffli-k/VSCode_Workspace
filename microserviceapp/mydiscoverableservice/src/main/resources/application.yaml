@@ -1,0 +1,26 @@
+spring:
+    application:
+        name: mydiscoverableservice
+
+# Using HashiCorp Consul
+    cloud:
+        consul:
+            enabled: true
+            host: localhost
+            port: 8500
+            discovery:
+                # Crucial: Consul (in Docker) needs to know how to reach your PC.
+                # 'localhost' inside Docker refers to the container itself.
+                prefer-ip-address: true
+                instance-id: ${spring.application.name}:${random.value}
+
+server:
+  port: 6000
+
+# Spring Netflix Eureka
+eureka:
+  client:
+    enabled: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+

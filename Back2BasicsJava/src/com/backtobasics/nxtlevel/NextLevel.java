@@ -1,10 +1,12 @@
 package com.backtobasics.nxtlevel;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -17,9 +19,125 @@ public class NextLevel {
         // day16June26();
         // anita_BiFunction_15Jul26();
         // a_EmpAverageSal(List.of());
-        a_EmpDets();
+        // a_EmpDets();
+        // July27Strings();
+        
+        var empList = List.of(
+            new Emp(1, "e1", "d1", 1000),
+            new Emp(2, "e2", "d1", 1000),
+            new Emp(3, "e3", "d1", 1000),
+            new Emp(4, "e4", "d2", 1000),
+            new Emp(5, "e5", "d2", 1000),
+            new Emp(6, "e6", "d3", 1000),
+            new Emp(7, "e7", "d3", 1000)
+        );
+        Aug06_EmployeeProcess(empList);
 
     }
+
+    private static void July27Strings() {
+
+        /*
+            String str = "Java Stream API";
+            Find the duplicate characters and print and eliminate spaces ..only duplicate characters need to be printed
+        */
+
+        String duplicateCharsAre =
+        "Jaaavaa StreammmAPiiiii aaare coooooolll but not reallyyy".chars()
+            .mapToObj(c -> (char)c)
+            .filter(eachChar -> Character.isAlphabetic(eachChar))
+            .collect(
+                Collectors.groupingBy(
+                    Function.identity(),
+                    Collectors.counting()
+                )
+            )
+            .entrySet().stream()
+            .filter(eachEntry -> eachEntry.getValue() > 1)
+            .map(eachSet -> String.valueOf(eachSet.getKey()))
+            .collect(Collectors.joining());
+        IO.print("Duplicates are: " + duplicateCharsAre +"\n");
+
+        /*
+            String str = "anita"
+            Find the last non-repeating character and print -'t' using stream.
+        */
+        String theString = "anita";
+        Map<Character, Long> mapCharCount = theString.chars().mapToObj(c -> (char)c)
+            .collect(
+                Collectors.groupingBy(
+                    Function.identity(),
+                    Collectors.counting()
+                )
+            );
+        
+        Character lastRepeatingChar = new StringBuilder(theString).reverse().toString().chars().mapToObj(c -> (char)c)
+            .filter(eachChar -> mapCharCount.getOrDefault(eachChar, 0L) == 1)
+            .findFirst().orElseThrow();
+        
+        IO.println("Last repeating Char is: " + lastRepeatingChar);
+
+    }
+
+    private record Emp(int id, String name, String dept, double salary){}
+
+    private static void Aug06_EmployeeProcess(List<Emp> empList) {
+
+        // Highest Paid Employee
+        Comparator<Emp> compareBySalary = Comparator.comparingDouble(Emp::salary);
+        Emp highestSalaryEmp = empList.stream()
+            .max(compareBySalary).orElseThrow();
+
+        IO.println("Highest Paid Employee: " + highestSalaryEmp);
+        
+        // Employee By Department
+        Map<String, List<Emp>> empGrpedByDept = empList.stream()
+            .collect(Collectors.groupingBy(Emp::dept));
+
+        IO.println("Employees Grouped by Department: " + empGrpedByDept);
+
+        //Second Highest Salary
+        Emp secondHighestPaidEmp = empList.stream().sorted(compareBySalary.reversed())
+            .skip(1)
+            .limit(1)
+            .findFirst().orElseThrow();
+        
+        IO.println("Employee with the second highly paid is: " + secondHighestPaidEmp);
+
+        // Find Duplicate Employees | Assuming ID is the Unique Identifier
+        Map<Integer, Long> empCountGroup =  empList.stream()
+            .collect(
+                Collectors.groupingBy(
+                    Emp::id,
+                    Collectors.counting()
+                )
+            );
+        String listOfDuplicateIDs = empCountGroup.entrySet().stream()
+        .filter(eachEntrySet -> eachEntrySet.getValue() > 1)
+        .map(eachEntry -> String.valueOf(eachEntry.getKey()))
+        .collect(Collectors.joining(","));
+        // .collect(
+        //     StringBuilder::new,
+        //     (theBuilder, theEntry) -> theBuilder.append(", " + theEntry.getKey()),
+        //     (theBuilder, theEntry) -> theBuilder.append(theEntry.toString())
+        // ).toString();
+
+        IO.println("List of Duplicate IDs: " + listOfDuplicateIDs);
+
+        var result = empList.stream()
+            .collect(
+                Collectors.groupingBy(
+                    Emp::dept,
+                        Collectors.mapping(
+                            Emp::name, 
+                            Collectors.toList()
+                        )
+                    )
+                );
+        
+        IO.println("List of EMP By Department: " + result);
+    }
+
 
     private record EmployeeDetails(int id, String name, String dept, int sal){};
 

@@ -4,8 +4,14 @@ import java.time.Duration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.Argument;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.stereotype.Service;
+
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
 
 @Service
 public class RabbitConsumer {
@@ -26,4 +32,14 @@ public class RabbitConsumer {
         Thread.sleep(Duration.ofSeconds(6).toMillis());
         return;
     }
+
+    /*-------------------------(Kafka Like)Stream------------------------- */
+    
+    @RabbitListener(queues = "stream-a", containerFactory = "streamRabbitListenerContainerFactory")
+    public void getMessageStream(String theMessage){
+        // IO.println(theMessage);
+        LOG.info("Received Message >>> " + theMessage);
+        return;
+    }
+
 }
