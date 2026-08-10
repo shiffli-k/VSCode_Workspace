@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.microservice.servicea.api.service.ClientApiService;
+import com.learn.microservice.servicea.api.service.ClientApiService.API_CLIENT;
 import com.rabbitmq.client.RpcClient.Response;
 
 import jakarta.annotation.PostConstruct;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -101,6 +104,14 @@ public class ServiceARestController {
 
         return ResponseEntity.ok("Pushed!");
     }
+
+    @GetMapping("/feign-1")
+    public ResponseEntity<String> feignTestOnEureka() {
+        String result = "Empty";
+        result = javaRestClient.getResponseFromServiceB(API_CLIENT.SPRING_CLOUD_OPEN_FEIGN);
+        return ResponseEntity.ok(result);
+    }
+    
     
     
 
