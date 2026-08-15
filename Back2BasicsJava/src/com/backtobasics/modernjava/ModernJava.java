@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -29,14 +30,86 @@ public class ModernJava {
         // basicThreads(task1);
         // virtualThreads(task1);
         // textBlocks();
+        switchExpressions();
         // switchCaseWithPatternMatch("AString");
         // sequencedCollections();
         // httpClient();
         // stringAPIs();
-        fileAPIs();
+        // fileAPIs();
 
     }
 
+    private enum DayOfWeek {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
+    private static void switchExpressions() {
+
+        DayOfWeek currentDay = DayOfWeek.MONDAY;
+
+        isTodayHoliday(currentDay);
+        isTodayHoliday("Monday".toLowerCase());
+
+        IO.println("-".repeat(5) + " Trying Numbers " + "-".repeat(5));
+        
+        int number = 2;
+        
+        String isOddEven = switch(number%2) {
+            case 0 -> "The Number is even";
+            default -> "none";
+        };
+        
+        IO.println("-".repeat(5) + " MultiLineLambda " + "-".repeat(5));
+        
+        int score = 80;
+
+        String rank = switch(score/10){
+            case 10 -> {
+                IO.println("The best!");
+                yield "S";
+            }
+            case 9,8 -> "A";
+            default -> {
+                IO.print("Needs Improvement!");
+                yield "F";
+            }
+        };
+
+        String objectToCheck ="";
+
+        switch(objectToCheck){
+            case String s when s.isBlank() -> IO.println("Its blank");
+            default -> IO.println("invalid");
+        };
+
+        switch(Integer.valueOf(100)){
+            case Integer s when s.intValue()%2==0 -> IO.println("Its blank");
+            default -> IO.println("invalid");
+        };
+
+        switch(null){
+            case null,default -> IO.println("Cant be null!");
+        }
+
+    }
+
+
+    private static void isTodayHoliday(DayOfWeek currentDay) {
+        IO.println("---- SwitchExpressions Enum ----");
+        String result = switch(currentDay){
+            case MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY -> "Gotta work!";
+            case SATURDAY,SUNDAY -> "Eh you chill today";
+            default -> "Day would not exist";
+        };
+
+        IO.println("The Outcome is: " + result);
+    }
+
+    private static void isTodayHoliday(String currentDay) {
+        IO.println("---- SwitchExpressions String ----");
+        switch(currentDay){
+            case "monday", "tuesday", "wednesday", "thursday", "friday" -> IO.println("Its a working day mate!");
+            case "saturday", "sunday" -> IO.println("Its a holiday mate!");
+            default -> IO.println("Idk what day this is!");
+        };
+    }
 
     private static void fileAPIs() throws IOException {
 
