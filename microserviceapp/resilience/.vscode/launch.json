@@ -9,6 +9,16 @@
             "projectName": "flakyservice",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ResiliantserviceApplication<resiliantservice>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.resilience.simulate.resiliantservice.ResiliantserviceApplication",
+            "projectName": "resiliantservice",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
