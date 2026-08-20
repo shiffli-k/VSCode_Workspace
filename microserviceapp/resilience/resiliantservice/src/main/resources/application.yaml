@@ -1,0 +1,22 @@
+spring:
+    application:
+        name: resiliantservice
+
+server:
+    port: 8001
+
+# Trying out Resilience via Spring boot starter 4
+resilience4j:
+    ratelimiter:
+        instances:
+            baselimit:
+                limit-for-period: 10
+                limit-refresh-period: 10s
+                timeout-duration: 0ms
+    retry:
+        instances:
+            baseretryconfig:
+                maxAttempts: 3                     # 1 initial call + 2 retries
+                waitDuration: 2s                   # Fixed wait between tries
+                enableExponentialBackoff: true     # Wait longer each time
+                exponentialBackoffMultiplier: 2    # 2s, then 4s, then 8s...

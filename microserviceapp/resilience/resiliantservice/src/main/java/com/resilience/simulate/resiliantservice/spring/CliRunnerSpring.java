@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class CliRunner implements CommandLineRunner{
+public class CliRunnerSpring implements CommandLineRunner{
 
     private static Logger log = LoggerFactory.getLogger("CLI Runner");
 
     private ClientApiService clientApiServ;
 
-    public CliRunner(ClientApiService springManagedClientApiServ){
+    public CliRunnerSpring(ClientApiService springManagedClientApiServ){
         this.clientApiServ = springManagedClientApiServ;
     }
 
@@ -29,7 +29,7 @@ public class CliRunner implements CommandLineRunner{
 
 
             // clientApiServ.getRespRetryable();
-            this.testConcurrent();
+            // this.testConcurrent();
 
 
         } catch (Exception e) {
