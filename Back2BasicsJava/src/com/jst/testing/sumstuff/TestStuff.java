@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class TestStuff implements Cloneable {
@@ -21,9 +22,19 @@ public class TestStuff implements Cloneable {
         // // Double a = Double.valueOf(1.234D);
         // // int b = a.intValue();
         
-        methodA();
+        // methodA();
         
-        hmmCursedJava();
+        // hmmCursedJava();
+
+
+        Predicate<Integer> obj = (a) -> {
+            return a == 0;
+        };
+
+
+        obj.test(1);
+
+
     }
     
     private static void methodA() {

@@ -1,0 +1,30 @@
+# ------------------------------------
+# Theme & Typography
+# ------------------------------------
+# theme = Atom One Dark
+# theme = Atom
+theme = Dracula
+font-family = "JetBrainsMono Nerd Font"
+font-size = 20
+font-thicken = true
+
+# ------------------------------------
+# Window & macOS Vibrancy
+# ------------------------------------
+macos-titlebar-style = transparent
+background-opacity = 0.75
+background-blur-radius = 25
+window-padding-x = 12
+window-padding-y = 10
+
+# ------------------------------------
+# Cursor & Mouse
+# ------------------------------------
+# cursor-style = underline
+cursor-style-blink = true
+mouse-hide-while-typing = true
+
+# ------------------------------------
+# Split Pane Polish
+# ------------------------------------
+unfocused-split-opacity = 0.75
