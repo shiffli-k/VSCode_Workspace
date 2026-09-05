@@ -37,15 +37,28 @@ public class ResiliantService {
         return "City %s is sunny".formatted(cityName); 
     }
 
-
     public String fallback4Retry(String cityName, Throwable t){
         log.warn("Retry attempts failed " + t.getMessage());
         return "Retry attempts failed -> "+ t.getMessage();
     }
-
-
+    
+    
     public String fallback4RateLimit(String cityName, RequestNotPermitted t){
         log.warn("Rate Limit has been reached! " + t.getMessage());
         return "Rate Limit has been reached! -> "+ t.getMessage();
     }
+
+    /* ----------------- Programatic RateLimit ----------------- */
+    
+    @RateLimiter(name = "programaticRateLimit", fallbackMethod = "fallback4ProgramaticRateLimit")
+    public void testingProgramaticRateLimit(long value){
+        log.info("Responding for: " + value);
+    }
+
+    public long fallback4ProgramaticRateLimit(long valueRestricted, RequestNotPermitted rnp){
+        String result = "Rate Limit reached when processing value: " + valueRestricted;
+        log.info(result);
+        return valueRestricted;
+    }
+
 }

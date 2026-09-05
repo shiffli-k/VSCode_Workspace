@@ -1,7 +1,11 @@
 package com.backtobasics.nxtlevel;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -33,6 +37,100 @@ public class NextLevel {
         );
         Aug06_EmployeeProcess(empList);
 
+        // -----------------------------
+        
+        /*
+        LeetCode easy Question:
+        Two Sum:
+        input : nums[] = {2,7,11,15}
+        target: 9
+        
+        o/p : index of the number whose sum is 9
+        */
+       int[] data = new int[] {2,11,15,7};
+       int targetVal = 9;
+       String result = twoSumTheLegend(data, targetVal);
+       IO.print("Two Sum Responded with: " + result);
+       
+       // -----------------------------
+       /*
+       Question 2: Valid Parentheses
+        Problem Statement
+        
+        Given a string containing just the characters:
+        
+        (
+        )
+        {
+        }
+        [
+        ]
+        
+        Determine if the input string is valid.
+        
+        A string is valid if:
+        
+        Open brackets are closed by the same type of brackets.
+        Open brackets are closed in the correct order.
+        Every closing bracket has a corresponding opening bracket.
+        
+        eg : String s ="({[]})";
+        output: true
+        
+        String s = "({)}";
+        output : false
+       */
+      
+        isValidParentheses("({[]})");
+        isValidParentheses("({)}");
+
+       
+    }
+    
+    public static final List<Character> OPENER = List.of('{', '[', '(');
+    public static final List<Character> CLOSER = List.of('{', '[', '(');
+    
+    private static boolean isValidParentheses(String theParanthesis) {
+        Deque<Character> charStack = new ArrayDeque<>();
+        
+        if(theParanthesis.isBlank()){
+            return false;
+        }
+
+        for(char eachChar : theParanthesis.toCharArray()){
+
+            boolean isOpener = OPENER.contains(eachChar);
+            boolean isCloser = CLOSER.contains(eachChar);
+
+            if(charStack.isEmpty() || OPE){
+
+            }
+
+        }
+        
+        return false;
+    }
+
+    private static String twoSumTheLegend(int[] arrayOfElements, int theTarget) {
+        
+        // Map of <ExpectedVal, index of the expectedVal>
+        Map<Integer,Integer> tracker = new HashMap<>();
+
+        for (int i = 0 ; i < arrayOfElements.length ; i++) {
+            
+            int currentVal = arrayOfElements[i];
+            int difference = theTarget - currentVal;
+
+            if(tracker.containsKey(difference)){
+                String result = tracker.get(difference) + ", " + i; 
+                IO.println("Values present in Index `" + result + "` will sum to " + theTarget);
+                return result;
+            }
+
+            tracker.put(currentVal, i);
+        }
+
+        return "None found :(";
     }
 
     private static void July27Strings() {

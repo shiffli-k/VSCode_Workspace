@@ -1,6 +1,8 @@
 package com.resilience.simulate.resiliantservice.starterspring;
 
+import java.time.Duration;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +25,8 @@ public class CliRunerStarterSpring implements CommandLineRunner{
 
         log.trace("--- Begin Execution of Spring Starter --");
 
-        log.trace("Trying retry");
-        service.getWeatherInfo(null);
+        // log.trace("Trying retry");
+        // service.getWeatherInfo(null);
 
         // log.trace("Trying Rate Limiting");
         // IntStream.rangeClosed(1, 6)
@@ -33,9 +35,27 @@ public class CliRunerStarterSpring implements CommandLineRunner{
         //         // service.getWeatherInfo(null)
         //     );
 
+        spammingBySecond();
 
         log.trace("-- Spring Starter CLI Runner Completed --");
         return;
+    }
+
+    private void spammingBySecond() {
+        
+        LongStream.rangeClosed(0, Long.MAX_VALUE)
+        .forEach(
+            eachVal ->{
+
+                try {
+                    Thread.sleep(Duration.ofSeconds(1));
+                    this.service.testingProgramaticRateLimit(eachVal);
+                } catch (InterruptedException e) {
+                    log.error("Error at spammingBySecond(): " + e.getMessage());
+                }
+            } 
+        );
+
     }
 
 

@@ -6,6 +6,7 @@ server:
     port: 8001
 
 # Trying out Resilience via Spring boot starter 4
+## Configuration via Properties/YAML
 resilience4j:
     ratelimiter:
         instances:
