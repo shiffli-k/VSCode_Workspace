@@ -43,7 +43,7 @@ public class CliRunerStarterSpring implements CommandLineRunner{
 
     private void spammingBySecond() {
         
-        LongStream.rangeClosed(0, Long.MAX_VALUE)
+        LongStream.rangeClosed(1, Long.MAX_VALUE)
         .forEach(
             eachVal ->{
 

@@ -51,14 +51,15 @@ public class ResiliantService {
     /* ----------------- Programatic RateLimit ----------------- */
     
     @RateLimiter(name = "programaticRateLimit", fallbackMethod = "fallback4ProgramaticRateLimit")
-    public void testingProgramaticRateLimit(long value){
+    public String testingProgramaticRateLimit(long value){
         log.info("Responding for: " + value);
+        return "Responding Successfully for Val: " + value;
     }
 
-    public long fallback4ProgramaticRateLimit(long valueRestricted, RequestNotPermitted rnp){
+    public String fallback4ProgramaticRateLimit(long valueRestricted, RequestNotPermitted rnp){
         String result = "Rate Limit reached when processing value: " + valueRestricted;
         log.info(result);
-        return valueRestricted;
+        return result;
     }
 
 }
