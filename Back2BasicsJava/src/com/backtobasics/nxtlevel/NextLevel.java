@@ -11,11 +11,14 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class NextLevel {
+
+    private static final Logger log = Logger.getLogger("NxTLvl");
     
     public static void main(String[] args) {
         // day15June26("racecar", "malayalam", "test", "notAPalindromeWord");
@@ -35,7 +38,7 @@ public class NextLevel {
             new Emp(6, "e6", "d3", 1000),
             new Emp(7, "e7", "d3", 1000)
         );
-        Aug06_EmployeeProcess(empList);
+        // Aug06_EmployeeProcess(empList);
 
         // -----------------------------
         
@@ -47,10 +50,10 @@ public class NextLevel {
         
         o/p : index of the number whose sum is 9
         */
-       int[] data = new int[] {2,11,15,7};
-       int targetVal = 9;
-       String result = twoSumTheLegend(data, targetVal);
-       IO.print("Two Sum Responded with: " + result);
+    //    int[] data = new int[] {2,11,15,7};
+    //    int targetVal = 9;
+    //    String result = twoSumTheLegend(data, targetVal);
+    //    IO.print("Two Sum Responded with: " + result);
        
        // -----------------------------
        /*
@@ -81,34 +84,62 @@ public class NextLevel {
         output : false
        */
       
-        isValidParentheses("({[]})");
-        isValidParentheses("({)}");
+        // isValidParentheses("({[]})");
+        // isValidParentheses("({)}");
+        // isValidParentheses("(AH)");
+        // isValidParentheses("{  }");
+        isValidParentheses("{(())}}");
 
        
     }
     
     public static final List<Character> OPENER = List.of('{', '[', '(');
-    public static final List<Character> CLOSER = List.of('{', '[', '(');
+    public static final List<Character> CLOSER = List.of('}', ']', ')');
+    public static final Map<Character,Character> bracketReference = Map.of(
+        '}', '{',
+        ']', '[',
+        ')', '('
+    );
     
     private static boolean isValidParentheses(String theParanthesis) {
-        Deque<Character> charStack = new ArrayDeque<>();
         
-        if(theParanthesis.isBlank()){
-            return false;
+        IO.println("\n--- Processing `" + theParanthesis + "` ---");
+
+        if(theParanthesis!=null && theParanthesis.isBlank()){
+            throw new RuntimeException("User dumb, no data in param. :( | Me Angry >.< ");
         }
 
+        Deque<Character> charStack = new ArrayDeque<>();
+        
         for(char eachChar : theParanthesis.toCharArray()){
 
             boolean isOpener = OPENER.contains(eachChar);
             boolean isCloser = CLOSER.contains(eachChar);
 
-            if(charStack.isEmpty() || OPE){
+            if(charStack.isEmpty() || isOpener){
+                charStack.push(eachChar);
+            }else if (isCloser){
+                // eahcChar is a closer
+                // peek and see if its matching or something idk I am lost bruh
+                Character theCharacterInStack = charStack.peek();
+                Character theExpectedOpener = bracketReference.get(eachChar);
+                if(theCharacterInStack.equals(theExpectedOpener)){
+                    IO.println("\tDEBUG: " + theCharacterInStack + " closed by " + eachChar);
+                    charStack.pop();
+                    continue;
+                }else{
+                    IO.println("--- `" + theExpectedOpener + "` was not present when closing by `" + eachChar+"` | Thus failing validation ---");
+                    return false;
+                }
 
+            }else{
+                IO.println("\tDEBUG: What do you expect me to do with this: `" + eachChar + "` :( | I will ignore this and move on...");
             }
 
         }
-        
-        return false;
+
+        IO.println("--- Iteration completed | unclosed count is " + charStack.size() + " thus returning response: " + charStack.isEmpty() + " ---");
+        return charStack.isEmpty();
     }
 
     private static String twoSumTheLegend(int[] arrayOfElements, int theTarget) {
