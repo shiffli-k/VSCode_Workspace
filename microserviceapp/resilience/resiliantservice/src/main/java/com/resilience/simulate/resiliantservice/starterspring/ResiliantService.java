@@ -55,11 +55,19 @@ public class ResiliantService {
         log.info("Responding for: " + value);
         return "Responding Successfully for Val: " + value;
     }
-
+    
     public String fallback4ProgramaticRateLimit(long valueRestricted, RequestNotPermitted rnp){
         String result = "Rate Limit reached when processing value: " + valueRestricted;
         log.info(result);
         return result;
+    }
+    
+    
+    /* ----------------- CircuitBreaker ----------------- */
+    
+    public void testCircutBreaker(long eachVal) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'testCircutBreaker'");
     }
 
 }

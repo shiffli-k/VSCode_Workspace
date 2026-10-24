@@ -10,13 +10,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CliRunerStarterSpring implements CommandLineRunner{
+public class CliRunner_R4j implements CommandLineRunner{
 
     private static final Logger log = LoggerFactory.getLogger("SpringStarterResiliance-CLIRUNNER");
 
     private ResiliantService service;
     
-    public CliRunerStarterSpring(ResiliantService springProvidedServ){
+    public CliRunner_R4j(ResiliantService springProvidedServ){
         this.service = springProvidedServ;
     }
 
@@ -37,7 +37,7 @@ public class CliRunerStarterSpring implements CommandLineRunner{
 
         spammingBySecond();
 
-        log.trace("-- Spring Starter CLI Runner Completed --");
+        log.trace("-- R4j CLI Runner Completed --");
         return;
     }
 
@@ -49,7 +49,10 @@ public class CliRunerStarterSpring implements CommandLineRunner{
 
                 try {
                     Thread.sleep(Duration.ofSeconds(1));
-                    this.service.testingProgramaticRateLimit(eachVal);
+
+                    // this.service.testingProgramaticRateLimit(eachVal);
+                    this.service.testCircutBreaker(eachVal);
+
                 } catch (InterruptedException e) {
                     log.error("Error at spammingBySecond(): " + e.getMessage());
                 }
