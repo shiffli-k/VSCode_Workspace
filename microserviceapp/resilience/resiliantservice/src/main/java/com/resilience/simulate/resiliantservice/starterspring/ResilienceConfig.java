@@ -24,15 +24,18 @@ public class ResilienceConfig {
         
     }
 
+    @Bean 
     public CircuitBreakerConfigCustomizer baseCircuitBreakerConfig(){
         return CircuitBreakerConfigCustomizer.of("baseCB", 
             cbBuilder -> cbBuilder
                 .slidingWindowSize(10) // Observe based on last 10 calls
                 
-                // .failureRateThreshold(50)  // Break open if 50% or more failure
-
-                .slowCallRateThreshold(50) // Break open if 50% or more slow APIs
-                .slowCallDurationThreshold(Duration.ofSeconds(5)) // Threshold of call Rates
+                // ## Configurations for API Failures
+                .failureRateThreshold(90)  // Break open if N% or more failure
+                
+                // ## Configurations for Slow APIs
+                // .slowCallRateThreshold(50) // Break open if 50% or more slow APIs
+                // .slowCallDurationThreshold(Duration.ofSeconds(2)) // Threshold of call Rates
 
                 .waitDurationInOpenState(Duration.ofSeconds(10)) // Wait during open state
 

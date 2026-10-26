@@ -19,6 +19,8 @@ public class FlakyApiController {
     
     private final AtomicInteger HIT_COUNTER = new AtomicInteger(0);
 
+    private boolean isApiDown = false;
+
     @GetMapping(path = "/")
     public ResponseEntity<String> basePath() {
         return ResponseEntity.ok("Service is Up! + Hit counter is at : " + HIT_COUNTER.get());
@@ -26,15 +28,21 @@ public class FlakyApiController {
 
     @GetMapping(path = "/inc")
     public ResponseEntity<String> incrementCounter(
-        @RequestParam(name = "incrementby", required = false, defaultValue = "0") int incrementBy
+        @RequestParam(name = "incrementby", required = false, defaultValue = "0") int incrementBy,
+        @RequestParam (name = "setVal", required = false, defaultValue = "-1") int setValue
     ){
-        HIT_COUNTER.addAndGet(incrementBy);
+        if(incrementBy > 0 ) HIT_COUNTER.addAndGet(incrementBy);
+        if(setValue >= 0 ) HIT_COUNTER.set(setValue);
+        
         log.info("Incrementing from " + HIT_COUNTER.get());
         return ResponseEntity.ok("Counter is: " + HIT_COUNTER.incrementAndGet());
     }
     
     @GetMapping(path = "/delayedEndpoint")
     public ResponseEntity<String> getDelayedResponseByHITCounter() throws InterruptedException{
+        
+        if(isApiDown) return ResponseEntity.internalServerError().body("API DOWN");
+        
         Duration delayDuration = Duration.ofMillis(HIT_COUNTER.get() * 250);
         
         log.info("Delaying API Response by: " + delayDuration.toMillis());
@@ -44,6 +52,13 @@ public class FlakyApiController {
         return ResponseEntity.ok("Response Delayed by: " + delayDuration.toMillis());
     }
 
-
+    @GetMapping (path = "/state")
+    public ResponseEntity<String> updateState(){
+        
+        isApiDown = !isApiDown;
+        
+        return ResponseEntity.ok("API Status is updated as" + isApiDown);
+    }
+    
     
 }

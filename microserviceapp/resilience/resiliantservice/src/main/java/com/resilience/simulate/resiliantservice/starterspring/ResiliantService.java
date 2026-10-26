@@ -6,7 +6,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -65,9 +67,14 @@ public class ResiliantService {
     
     /* ----------------- CircuitBreaker ----------------- */
     
+    @CircuitBreaker (name = "baseCB", fallbackMethod = "fallback4testCircutBreaker")
     public void testCircutBreaker(long eachVal) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'testCircutBreaker'");
+        String response = RestClient.create("http://localhost:8000/delayedEndpoint").get().retrieve().body(String.class);
+        log.info(eachVal + "Reponse: " + response);
+    }
+
+    public void fallback4testCircutBreaker(long eachVal, Throwable t){
+        log.info("Fallback Method | Caused by "+ t.getClass().getName()+ " | " + t.getMessage());
     }
 
 }
